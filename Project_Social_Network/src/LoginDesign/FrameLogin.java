@@ -2,6 +2,8 @@ package LoginDesign;
 
 import java.awt.BorderLayout;
 import java.awt.EventQueue;
+import User.Users;
+import HashPw.*;
 
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
@@ -20,9 +22,20 @@ import java.awt.Image;
 import javax.swing.SwingConstants;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
 import javax.swing.JButton;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+
 
 public class FrameLogin extends JFrame {
 
@@ -33,6 +46,7 @@ public class FrameLogin extends JFrame {
 	private Image img_password = new ImageIcon(FrameLogin.class.getResource("../imglogin/password.png")).getImage().getScaledInstance(25, 25, Image.SCALE_SMOOTH);
 	private Image img_login = new ImageIcon(FrameLogin.class.getResource("../imglogin/login_icon.jpg")).getImage().getScaledInstance(45, 35, Image.SCALE_SMOOTH);
 	private JLabel loginMessager = new JLabel("");
+	private Users user = new Users();
 	
 	/**
 	 * Launch the application.
@@ -50,6 +64,36 @@ public class FrameLogin extends JFrame {
 		});
 	}
 
+	
+	public static boolean check_existe_user(String username, String password) {
+		try {
+			Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
+    		String DB_URL = "jdbc:sqlserver://localhost:62673;databaseName=Social_Network;integratedSecurity=true;";
+    		Connection conn = DriverManager.getConnection(DB_URL);
+    		Statement stmt = conn.createStatement();
+    		String getAllUser = "Select * From User_Social";
+    		ResultSet r = stmt.executeQuery(getAllUser);
+			while(r.next()) {
+				if(r.getString("Username").equals(username) && BCrypt.checkpw(password, r.getString("Passwork"))) {
+					return true;
+				}
+			}
+			r.close();
+    		
+    		
+		}catch(ClassNotFoundException ex)
+		{
+			System.out.println("Error: unable to load driver class.");
+    		System.exit(1);
+		} catch (SQLException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		
+		
+		return false;
+	}
+	
 	/**
 	 * Create the frame.
 	 */
@@ -143,9 +187,17 @@ public class FrameLogin extends JFrame {
 		btnLogin.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				if(txtUsername.getText().equals("admin") && txtPassword.getText().equals("123456")) {
+				if(!txtUsername.getText().equals("") && !txtPassword.getText().equals("")) {
 					loginMessager.setText("");
-					JOptionPane.showMessageDialog(null,"Login successfully");
+					if(check_existe_user(txtUsername.getText(),txtPassword.getText()))
+					{
+						JOptionPane.showMessageDialog(null,"Login successfully");
+						loginMessager.setText("");
+					}
+					else {
+						loginMessager.setText("Username or password not correct!");
+					}
+					
 				}
 				else {
 					if(txtUsername.getText().equals("") || txtPassword.getText().equals("")|| txtUsername.getText().equals("Username") || txtPassword.getText().equals("Password")) {

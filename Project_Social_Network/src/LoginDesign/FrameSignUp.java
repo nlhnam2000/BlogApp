@@ -2,6 +2,7 @@ package LoginDesign;
 
 import java.awt.BorderLayout;
 import User.Users;
+import HashPw.*;
 
 import java.awt.EventQueue;
 
@@ -51,6 +52,8 @@ public class FrameSignUp extends JFrame {
 	private JRadioButton FemaleRadioButton = new JRadioButton("Female");
 	private JRadioButton MaleRadioButton = new JRadioButton("Male");
 	private JLabel check_sex = new JLabel("");
+	
+	
 	
 	// Check date of birth
 	public static boolean check_date(String d) {
@@ -342,7 +345,8 @@ public class FrameSignUp extends JFrame {
 			    		String date_of_birth = txtDate.getText();
 			    		String adress = txtadress.getText();
 			    		String email = txtemail.getText();
-			    		Users u = new Users(username, password, firstname, lastname, date_of_birth, adress, email);
+			    		String hashpw = BCrypt.hashpw(password, BCrypt.gensalt(12));
+			    		Users u = new Users(username, hashpw, firstname, lastname, date_of_birth, adress, email);
 			    		String insert = "Insert Into User_Social Values('" + u.getFirst_Name() + "','"
 			    				+ u.getLast_Name() + "','" + u.getUsername() + "','" + u.getPassword() + "','" + u.getDate_Of_Birth() + "','" + 
 			    				u.getAdress() + "','" + u.getEmail() + "')";

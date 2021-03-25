@@ -12,6 +12,10 @@ public class Users{
     protected String Adress;
     protected String Email;
     
+    public Users() {
+    	
+    }
+    
     public Users(String username, String password, String first_Name, String last_Name, String date_Of_Birth,
 			String adress, String email) {
 		super();
