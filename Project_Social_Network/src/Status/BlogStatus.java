@@ -4,8 +4,8 @@ package Status;
 public class BlogStatus{
     protected boolean status;
     
-    BlogStatus(){
-        this.status = false;
+    public BlogStatus(){
+        this.status = true;
     }
 
     BlogStatus(BlogStatus b){

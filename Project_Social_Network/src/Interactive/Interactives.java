@@ -10,10 +10,11 @@ public class Interactives{
     protected boolean DeleteCmt;
     protected boolean EditCmt;
     protected String Date;
+    protected String UsernameBlog;
 
-    Interactives(){}
+    public Interactives(){}
 
-    Interactives(String username, int blogid, int cmtid, String body, boolean deletecmt, boolean editcmt, String date){
+    public Interactives(String username, int blogid, int cmtid, String body, boolean deletecmt, boolean editcmt, String date, String usernameblog){
         this.Username = username;
         this.BlogID = blogid;
         this.CommentID = cmtid;
@@ -21,9 +22,10 @@ public class Interactives{
         this.DeleteCmt = deletecmt;
         this.EditCmt = editcmt;
         this.Date = date;
+        this.UsernameBlog = usernameblog;
     }
 
-    Interactives(Interactives i){
+    public Interactives(Interactives i){
         this.Username = i.Username;
         this.BlogID = i.BlogID;
         this.CommentID = i.CommentID;
@@ -31,11 +33,20 @@ public class Interactives{
         this.DeleteCmt = i.DeleteCmt;
         this.EditCmt = i.EditCmt;
         this.Date = i.Date;
+        this.UsernameBlog = i.UsernameBlog;
     }
 
     /// Method get
 
-    public String get_Username(){
+    public String getUsernameBlog() {
+		return UsernameBlog;
+	}
+
+	public void setUsernameBlog(String usernameBlog) {
+		UsernameBlog = usernameBlog;
+	}
+
+	public String get_Username(){
         return this.Username;
     }
 
@@ -98,7 +109,7 @@ public class Interactives{
 
 
     public void CommentBlog(){
-
+    	
     }
 
     public void EditComment(){

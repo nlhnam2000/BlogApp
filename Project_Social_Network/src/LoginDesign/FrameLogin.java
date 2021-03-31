@@ -1,6 +1,7 @@
 package LoginDesign;
 
 import java.awt.BorderLayout;
+import Blog.*;
 import java.awt.EventQueue;
 import User.Users;
 import HashPw.*;
@@ -47,6 +48,7 @@ public class FrameLogin extends JFrame {
 	private Image img_login = new ImageIcon(FrameLogin.class.getResource("../imglogin/login_icon.jpg")).getImage().getScaledInstance(45, 35, Image.SCALE_SMOOTH);
 	private JLabel loginMessager = new JLabel("");
 	private Users user = new Users();
+	private int UserID = 0;
 	
 	/**
 	 * Launch the application.
@@ -75,6 +77,7 @@ public class FrameLogin extends JFrame {
     		ResultSet r = stmt.executeQuery(getAllUser);
 			while(r.next()) {
 				if(r.getString("Username").equals(username) && BCrypt.checkpw(password, r.getString("Passwork"))) {
+					
 					return true;
 				}
 			}
@@ -189,10 +192,18 @@ public class FrameLogin extends JFrame {
 			public void mouseClicked(MouseEvent e) {
 				if(!txtUsername.getText().equals("") && !txtPassword.getText().equals("")) {
 					loginMessager.setText("");
-					if(check_existe_user(txtUsername.getText(),txtPassword.getText()))
+					if(FrameLogin.this.user.Login(txtUsername.getText(),txtPassword.getText()))
 					{
 						JOptionPane.showMessageDialog(null,"Login successfully");
 						loginMessager.setText("");
+						
+						
+						BlogFrame b = new BlogFrame(FrameLogin.this.user, FrameLogin.this.UserID);
+						FrameLogin.this.dispose();
+					
+						System.out.print(FrameLogin.this.UserID);
+						b.setVisible(true);
+						
 					}
 					else {
 						loginMessager.setText("Username or password not correct!");
@@ -282,7 +293,7 @@ public class FrameLogin extends JFrame {
 		label.setBounds(171, 249, -17, 1);
 		contentPane.add(label);
 		
-		loginMessager.setForeground(new Color(205, 92, 92));
+		loginMessager.setForeground(new Color(255, 255, 0));
 		loginMessager.setFont(new Font("Arial", Font.PLAIN, 12));
 		loginMessager.setBounds(171, 260, 250, 20);
 		contentPane.add(loginMessager);
@@ -302,7 +313,7 @@ public class FrameLogin extends JFrame {
 		btnNewButton.setBounds(323, 334, 98, 21);
 		contentPane.add(btnNewButton);
 		
-		setUndecorated(true);
+//		setUndecorated(true);
 		setLocationRelativeTo(null);
 		
 	}

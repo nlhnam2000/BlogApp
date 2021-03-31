@@ -1,5 +1,13 @@
 package Blog;
 
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.ArrayList;
+
+import Interactive.Interactives;
 import Status.BlogStatus;
 
 public class Blogs{
@@ -13,10 +21,11 @@ public class Blogs{
     protected String Date;
     protected boolean Edit;
     protected BlogStatus status;
+    ArrayList<Interactives> cmt = new ArrayList<Interactives>();
 
-    Blogs(){}
+    public Blogs(){}
 
-    Blogs(String title, int blogid, String username, String body, boolean cmtEnabled, boolean delete, String
+    public Blogs(String title, int blogid, String username, String body, boolean cmtEnabled, boolean delete, String
     date, boolean edit, BlogStatus statuss){
         this.Title = title;
         this.BlogID = blogid;
@@ -29,7 +38,7 @@ public class Blogs{
         this.status = statuss;
     }
 
-    Blogs(Blogs b){
+    public Blogs(Blogs b){
         this.Title = b.Title;
         this.BlogID = b.BlogID;
         this.Username = b.Username;
@@ -39,6 +48,7 @@ public class Blogs{
         this.Date = b.Date;
         this.Edit = b.Edit;
         this.status = b.status;
+        // this.getAllCmnt();
     }
 
     /// Method get
@@ -111,6 +121,39 @@ public class Blogs{
         this.Edit = edit;
     }
 
+    public void getAllCmnt() {
+    	this.cmt.clear();
+    	try {
+			Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
+    		String DB_URL = "jdbc:sqlserver://localhost:62673;databaseName=Social_Network;integratedSecurity=true;";
+    		Connection conn = DriverManager.getConnection(DB_URL);
+    		Statement stmt = conn.createStatement();
+    		String getAllUser = "Select * From Comment";
+    		ResultSet r = stmt.executeQuery(getAllUser);
+			while(r.next()) {
+				if(r.getString("BlogID").equals(this.BlogID))
+				{
+					Interactives inter = new Interactives(r.getString("Username"), r.getInt("BlogID"), r.getInt("CommentID"),
+							r.getString("Body"),r.getBoolean("Deletecmt"), r.getBoolean("Edit"), r.getString("Date_of_Comment"),
+							r.getString("UsernameIDBlog"));
+					this.cmt.add(inter);
+				}
+				
+				
+			}
+			r.close();
+    		
+    		
+		}catch(ClassNotFoundException ex)
+		{
+			System.out.println("Error: unable to load driver class.");
+    		System.exit(1);
+		} catch (SQLException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+    
+    }
 
     /// Method
 

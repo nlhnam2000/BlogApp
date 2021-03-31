@@ -332,43 +332,29 @@ public class FrameSignUp extends JFrame {
 					check_sex.setText("");
 				}
 				if(check == 7) {
-					try {
-						Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
-			    		String DB_URL = "jdbc:sqlserver://localhost:62673;databaseName=Social_Network;integratedSecurity=true;";
-			    		Connection conn = DriverManager.getConnection(DB_URL);
-			    		Statement stmt = conn.createStatement();
+				
 			    		
-			    		String firstname = txtfirstname.getText();
-			    		String lastname = txtlastname.getText();
-			    		String username = txtusername.getText();
-			    		String password = txtpassword.getText();
-			    		String date_of_birth = txtDate.getText();
-			    		String adress = txtadress.getText();
-			    		String email = txtemail.getText();
-			    		String hashpw = BCrypt.hashpw(password, BCrypt.gensalt(12));
-			    		Users u = new Users(username, hashpw, firstname, lastname, date_of_birth, adress, email);
-			    		String insert = "Insert Into User_Social Values('" + u.getFirst_Name() + "','"
-			    				+ u.getLast_Name() + "','" + u.getUsername() + "','" + u.getPassword() + "','" + u.getDate_Of_Birth() + "','" + 
-			    				u.getAdress() + "','" + u.getEmail() + "')";
-			    		stmt.executeUpdate(insert);
-			    		conn.commit();
-			    		txtfirstname.setText("");
-			    		txtlastname.setText("");
-			    		txtusername.setText("");
-			    		txtpassword.setText("");
-			    		txtDate.setText("");
-			    		txtadress.setText("");
-			    		txtemail.setText("");
-			    		
-			    		
-					}catch(ClassNotFoundException ex)
-					{
-						System.out.println("Error: unable to load driver class.");
-			    		System.exit(1);
-					} catch (SQLException e1) {
-						// TODO Auto-generated catch block
-						e1.printStackTrace();
-					}
+			    	String firstname = txtfirstname.getText();
+			    	String lastname = txtlastname.getText();
+			   		String username = txtusername.getText();
+			   		String password = txtpassword.getText();
+			   		String date_of_birth = txtDate.getText();
+			   		String adress = txtadress.getText();
+		    		String email = txtemail.getText();
+		    		String hashpw = BCrypt.hashpw(password, BCrypt.gensalt(12));
+		    		Users u = new Users(username, hashpw, firstname, lastname, date_of_birth, adress, email);
+			    	u.SignUp();	
+		    		
+					txtfirstname.setText("");
+		    		txtlastname.setText("");
+		    		txtusername.setText("");
+		    		txtpassword.setText("");
+		    		txtDate.setText("");
+		    		txtadress.setText("");
+		    		txtemail.setText("");
+		    		FrameSignUp.this.dispose();
+		    		FrameLogin login = new FrameLogin();
+		    		login.setVisible(true);
 				}
 				
 			}
@@ -475,6 +461,27 @@ public class FrameSignUp extends JFrame {
 		check_sex.setFont(new Font("Arial", Font.PLAIN, 12));
 		check_sex.setBounds(485, 420, 183, 20);
 		contentPane.add(check_sex);
+		
+		JButton btnNewButton_1 = new JButton("X");
+		btnNewButton_1.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				if(JOptionPane.showConfirmDialog(null,"Are you sure you want to close this application ?", "Confirmation",JOptionPane.YES_NO_OPTION) == 0){
+					FrameSignUp.this.dispose();
+					
+				}
+			}
+		});
+		btnNewButton_1.setFont(new Font("Arial", Font.BOLD, 14));
+		btnNewButton_1.setForeground(new Color(255, 0, 0));
+		btnNewButton_1.setBackground(new Color(0, 139, 139));
+		btnNewButton_1.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+			}
+		});
+		btnNewButton_1.setBounds(750, 0, 50, 21);
+		contentPane.add(btnNewButton_1);
+		setUndecorated(true);
 		
 		
 	}
