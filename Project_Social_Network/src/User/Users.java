@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import Blog.*;
 import Interactive.*;
 import LoginDesign.FrameLogin;
+import Query.QuerySQL;
 import HashPw.BCrypt;
 import Status.*;
 
@@ -138,6 +139,7 @@ public class Users{
         this.Date_Of_Birth = a.Date_Of_Birth;
         this.Adress = a.Adress;
         this.Email = a.Email;
+        this.UserID = a.UserID;
     }
 
 
@@ -221,7 +223,20 @@ public class Users{
     
     
 
-    public boolean Validation(){
+    public Users(String username, String password, String first_Name, String last_Name, String date_Of_Birth,
+			String adress, String email, int userID) {
+		super();
+		Username = username;
+		Password = password;
+		First_Name = first_Name;
+		Last_Name = last_Name;
+		Date_Of_Birth = date_Of_Birth;
+		Adress = adress;
+		Email = email;
+		UserID = userID;
+	}
+
+	public boolean Validation(){
         return true;
     }
 
@@ -294,6 +309,8 @@ public class Users{
 		}
     }
     
+    
+    
     public boolean PostBlog(Blogs b){
     	try {
 			Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
@@ -302,12 +319,37 @@ public class Users{
     		Statement stmt = conn.createStatement();
     		int Hitcmt = 0;
     		int HitLike = 0;
-    		String insert = "Insert Into Blog Values('" + this.getFirst_Name() + "','"
-    				+ this.getLast_Name() + "','" + this.UserID + "','" + this.getUsername() + "','" + b.get_Title() + "','" + 
+    		System.out.print(this.UserID + " "  + b.get_Username());
+    		String insert = "Insert Into Blog Values('" + this.UserID + "','" + b.get_Username() + "','" + b.get_Title() + "','" + 
     				b.get_Body() + "','" + b.get_CommentEnabled() + "','" + b.get_DeleteBlog() + "','" + b.get_Edit()
     				+ "','" + b.get_Date() + "','" + Hitcmt + "','" + HitLike + "')";
     		stmt.executeUpdate(insert);
     		conn.commit();
+    		
+    		String select = "Select * From Blog Where Username = '" + b.get_Username() +"'";
+    		ResultSet r = stmt.executeQuery(select);
+    		int blogID = 0;
+    		boolean stt = true;
+			while(r.next()) {
+				
+				if(r.getInt("BlogID") > blogID) {
+					blogID = r.getInt("BlogID");
+					stt = r.getBoolean("Edit");
+				}
+				
+			}
+			System.out.print(blogID);
+			
+			int status = 1;
+			if(!stt) {
+				status = 0;
+			}
+			
+			String insertstatus = "Insert Into BlogStatus Values('" + b.get_Username() + "'," + blogID
+    				+ ","  + status + ")";
+			stmt.executeUpdate(insertstatus);
+    		conn.commit();
+			
     		return true;
 		}catch(ClassNotFoundException ex)
 		{
@@ -320,23 +362,43 @@ public class Users{
     	return false;
     }
 
-    public void ViewsBlog(){
+    public int getUserID() {
+		return UserID;
+	}
+
+	public void setUserID(int userID) {
+		UserID = userID;
+	}
+
+	public void ViewsBlog(){
     	
     }
 
-    public boolean PostCmnt(Interactives inter){
+    public boolean PostCmt(Interactives inter){
     	try {
 			Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
     		String DB_URL = "jdbc:sqlserver://localhost:62673;databaseName=Social_Network;integratedSecurity=true;";
     		Connection conn = DriverManager.getConnection(DB_URL);
     		Statement stmt = conn.createStatement();
-
-    		String insert = "Insert Into Comment Values('" + this.UserID + "','"
-    				+ this.getUsername() + "','" + inter.getUsernameBlog() + "','" + inter.get_BlogID() + "','" + inter.get_Body() + "','" + 
-    				inter.get_DeleteCmt() + "','" + inter.get_EditCmt() + "','" + inter.get_Date() + "')";
-    		stmt.executeUpdate(insert);
-    		conn.commit();
-    		return true;
+    		int delete = 1;
+    		int edit = 1;
+    		if(!inter.get_DeleteCmt()) {
+    			delete = 0;
+    		}
+    		if(!inter.get_EditCmt()) {
+    			edit = 0;
+    		}
+    		
+    		if(inter.get_EditCmt()) {
+    			String insert = "Insert Into Comment Values(" + this.UserID + ",'" + inter.get_Username()+ "','" +
+    		    		inter.getUsernameBlog() + "'," + inter.get_BlogID() + ",'" + inter.get_Body() + "'," + delete
+    		    		 + "," + edit + ",'" + inter.get_Date() + "','" + "" + "')";
+    		    stmt.executeUpdate(insert);
+    		    conn.commit();
+    		    return true;
+    		}
+    		
+    		
 		}catch(ClassNotFoundException ex)
 		{
 			System.out.println("Error: unable to load driver class.");
@@ -356,16 +418,217 @@ public class Users{
 
     }
 
-    public void LikeBlog(){
+    public void LikeBlog(int blogID, String usernameBlog){
+    	try {
+			Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
+    		String DB_URL = "jdbc:sqlserver://localhost:62673;databaseName=Social_Network;integratedSecurity=true;";
+    		Connection conn = DriverManager.getConnection(DB_URL);
+    		Statement stmt = conn.createStatement();
+    		String select = "Select * From LikeBlog";
+    		ResultSet r = stmt.executeQuery(select);
+    		boolean check = false;
+    		boolean stt = false;
+    		while(r.next()) {
+				
+				if(r.getInt("UsernameID") == this.UserID) {
+					check = true;
+					stt = r.getBoolean("StatusLike");
+					break;
+				}
+				
+			}
+    		
+    		if(check) {
+    			if(stt) {
+    				String update = "Update Set StatusLike =" + 0 + " Where UsernameID = " + this.UserID;
+    				stmt.executeUpdate(update);
+    			}
+    			else {
+    				String update = "Update Set StatusLike =" + 1 + " Where UsernameID = " + this.UserID;
+    				stmt.executeUpdate(update);
+    			}
+    		}
+    		else {
+    			String insert = "Insert Into LikeBlog Values(" + this.UserID + ",'" + this.Username + "',"
+    					+ 1 + ",'" + usernameBlog + "'," + blogID + ")";
+    			stmt.executeUpdate(insert);
+    		}
+    		
+    		conn.commit();
+    
+		}catch(ClassNotFoundException ex)
+		{
+			System.out.println("Error: unable to load driver class.");
+    		System.exit(1);
+		} catch (SQLException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+   
+    }	
 
+    public boolean DeleteBlog(int BlogID){
+    	try {
+			Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
+    		String DB_URL = "jdbc:sqlserver://localhost:62673;databaseName=Social_Network;integratedSecurity=true;";
+    		Connection conn = DriverManager.getConnection(DB_URL);
+    		Statement stmt = conn.createStatement();
+    		String select = "Select * From Blog";
+    		ResultSet r = stmt.executeQuery(select);
+    		boolean Delete = true;
+    		while(r.next()) {
+				
+				if(r.getInt("BlogID") ==  BlogID && this.Username.equals(r.getString("Username"))) {
+					Delete = r.getBoolean("DeleteBlog");
+				}
+				
+			}
+    		
+    		if(Delete){
+    			QuerySQL qr = new QuerySQL();
+    			if(qr.ClearCmtAndLikeOfBlog(BlogID)) {
+    				String delete = "Delete From Blog Where BlogID = " + BlogID;
+        			stmt.executeUpdate(delete);
+        			conn.commit();
+        			return true;
+    			}
+    			else {
+    				return false;
+    			}
+    			
+    		}
+    		
+    		
+    		
+    	
+		}catch(ClassNotFoundException ex)
+		{
+			System.out.println("Error: unable to load driver class.");
+    		System.exit(1);
+		} catch (SQLException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+    	return false;
+   
+    }
+    
+    public boolean DeleteCmt(int CmtID){
+    	try {
+			Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
+    		String DB_URL = "jdbc:sqlserver://localhost:62673;databaseName=Social_Network;integratedSecurity=true;";
+    		Connection conn = DriverManager.getConnection(DB_URL);
+    		Statement stmt = conn.createStatement();
+    		String select = "Select * From Comment";
+    		ResultSet r = stmt.executeQuery(select);
+    		boolean Delete = true;
+    		while(r.next()) {
+				
+				if(r.getInt("CommentID") ==  CmtID && this.Username.equals(r.getString("Username"))) {
+					Delete = r.getBoolean("DeleteCmt");
+				}
+				
+			}
+    		
+    		if(Delete){
+    			String delete = "Delete From Comment Where CommentID = " + CmtID;
+    			stmt.executeUpdate(delete);
+    			conn.commit();
+    			return true;
+    		}
+    		
+    		
+    		
+    	
+		}catch(ClassNotFoundException ex)
+		{
+			System.out.println("Error: unable to load driver class.");
+    		System.exit(1);
+		} catch (SQLException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+    	return false;
+   
     }
 
-    public void DeleteBlog(){
-
+    public boolean EditBlog(int BlogID, String title, String body){
+    	try {
+			Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
+    		String DB_URL = "jdbc:sqlserver://localhost:62673;databaseName=Social_Network;integratedSecurity=true;";
+    		Connection conn = DriverManager.getConnection(DB_URL);
+    		Statement stmt = conn.createStatement();
+    		String select = "Select * From Blog";
+    		ResultSet r = stmt.executeQuery(select);
+    		boolean Edit = true;
+    		while(r.next()) {
+				
+				if(r.getInt("BlogID") ==  BlogID && this.Username.equals(r.getString("Username"))) {
+					Edit = r.getBoolean("Edit");
+				}
+				
+			}
+    		r.close();
+    		if(Edit){
+    			String update = "Update Blog Set Title = '" + title + "', Body = '" + body + "' Where BlogID = " + BlogID;
+    			stmt.executeUpdate(update);
+    			conn.commit();
+    			return true;
+    		}
+    		
+    		
+    		
+    	
+		}catch(ClassNotFoundException ex)
+		{
+			System.out.println("Error: unable to load driver class.");
+    		System.exit(1);
+		} catch (SQLException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+    	return false;
     }
-
-    public void EditBlog(){
-
+    
+    
+    public boolean EditCmt(int CmtID, String body)
+    {
+    	try {
+			Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
+    		String DB_URL = "jdbc:sqlserver://localhost:62673;databaseName=Social_Network;integratedSecurity=true;";
+    		Connection conn = DriverManager.getConnection(DB_URL);
+    		Statement stmt = conn.createStatement();
+    		String select = "Select * From Comment";
+    		ResultSet r = stmt.executeQuery(select);
+    		boolean Update = true;
+    		while(r.next()) {
+				
+				if(r.getInt("CommentID") ==  CmtID && this.Username.equals(r.getString("Username"))) {
+					Update = r.getBoolean("Edit");
+				}
+				
+			}
+    		
+    		r.close();
+    		if(Update){
+    			String delete = "Update Comment Set Body = '" + body + "' Where CommentID = " + CmtID;
+    			stmt.executeUpdate(delete);
+    			conn.commit();
+    			return true;
+    		}
+    		
+    		
+    		
+    	
+		}catch(ClassNotFoundException ex)
+		{
+			System.out.println("Error: unable to load driver class.");
+    		System.exit(1);
+		} catch (SQLException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+    	return false;
     }
 
     public void SetPrivacy(){

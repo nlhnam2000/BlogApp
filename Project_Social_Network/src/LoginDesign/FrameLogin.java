@@ -198,10 +198,10 @@ public class FrameLogin extends JFrame {
 						loginMessager.setText("");
 						
 						
-						BlogFrame b = new BlogFrame(FrameLogin.this.user, FrameLogin.this.UserID);
+						BlogFrame b = new BlogFrame(FrameLogin.this.user, FrameLogin.this.user.getUserID());
 						FrameLogin.this.dispose();
 					
-						System.out.print(FrameLogin.this.UserID);
+						
 						b.setVisible(true);
 						
 					}

@@ -14,10 +14,22 @@ public class Interactives{
 
     public Interactives(){}
 
-    public Interactives(String username, int blogid, int cmtid, String body, boolean deletecmt, boolean editcmt, String date, String usernameblog){
+    public Interactives(String username, int blogid, int cmtid, String body, boolean deletecmt, 
+    		boolean editcmt, String date, String usernameblog){
         this.Username = username;
         this.BlogID = blogid;
         this.CommentID = cmtid;
+        this.Body = body;
+        this.DeleteCmt = deletecmt;
+        this.EditCmt = editcmt;
+        this.Date = date;
+        this.UsernameBlog = usernameblog;
+    }
+    
+    public Interactives(String username, int blogid, String body, boolean deletecmt, 
+    		boolean editcmt, String date, String usernameblog){
+        this.Username = username;
+        this.BlogID = blogid;
         this.Body = body;
         this.DeleteCmt = deletecmt;
         this.EditCmt = editcmt;

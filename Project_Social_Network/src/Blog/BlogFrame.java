@@ -8,6 +8,9 @@ import java.awt.EventQueue;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
+
+import Status.BlogStatus;
+
 import javax.swing.JTextArea;
 
 public class BlogFrame extends JFrame {
@@ -34,7 +37,15 @@ public class BlogFrame extends JFrame {
 		JTextArea txtrHello = new JTextArea();
 		txtrHello.setBounds(197, 172, 265, 226);
 		contentPane.add(txtrHello);
-		txtrHello.setText(BlogFrame.this.user.getUsername());
+		txtrHello.setText(BlogFrame.this.user.getUsername() + " " + BlogFrame.this.UserID);
+		BlogFrame.this.user.EditBlog(7, "Troi xanh" , "Hom nay la mot ngay dep troi");
+		BlogFrame.this.user.EditCmt(3, "Cmt de len fan cung :v");
+		
+//		Blogs b = new Blogs("Nau an", this.user.getUsername(),"Hom nay minh da nau duoc mot vai mon ngon", true,  true,
+//				"2021-03-31", true, new BlogStatus());
+//		
+//		System.out.print(this.user.getUsername() + " " + this.user.getUserID());
+//		this.user.PostBlog(b);
 		
 	}
 	

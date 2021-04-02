@@ -37,6 +37,18 @@ public class Blogs{
         this.Edit = edit;
         this.status = statuss;
     }
+    
+    public Blogs(String title, String username, String body, boolean cmtEnabled, boolean delete, String
+    	    date, boolean edit, BlogStatus statuss){
+    	        this.Title = title;
+    	        this.Username = username;
+    	        this.Body = body;
+    	        this.CommentEnabled = cmtEnabled;
+    	        this.DeleteBlog = delete;
+    	        this.Date = date;
+    	        this.Edit = edit;
+    	        this.status = statuss;
+    	    }
 
     public Blogs(Blogs b){
         this.Title = b.Title;
