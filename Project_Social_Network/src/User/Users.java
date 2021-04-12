@@ -243,9 +243,16 @@ public class Users{
     public void getAllBlog() {
     	this.blog.clear();
     	try {
-			Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
-    		String DB_URL = "jdbc:sqlserver://localhost:62673;databaseName=Social_Network;integratedSecurity=true;";
-    		Connection conn = DriverManager.getConnection(DB_URL);
+//			Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
+//    		String DB_URL = "jdbc:sqlserver://localhost:62673;databaseName=Social_Network;integratedSecurity=true;";
+    		
+    		Class.forName("com.mysql.cj.jdbc.Driver"); 
+    		final String DB_URL = "jdbc:mysql://localhost/Social_Network";
+    		final String USER = "root"; 
+    		final String PASSWORD = "hoangnam"; 
+    		
+    		// Connection conn = DriverManager.getConnection(DB_URL);
+    		Connection conn = DriverManager.getConnection(DB_URL, USER, PASSWORD); 
     		Statement stmt = conn.createStatement();
     		String getAllUser = "Select * From Blog";
     		ResultSet r = stmt.executeQuery(getAllUser);
