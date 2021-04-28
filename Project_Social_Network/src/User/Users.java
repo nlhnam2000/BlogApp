@@ -2,6 +2,7 @@ package User;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -23,9 +24,13 @@ public class Users{
     protected String Date_Of_Birth;
     protected String Adress;
     protected String Email;
-    protected ArrayList<Blogs> blog = new ArrayList<Blogs>();
+    ArrayList<Blogs> blog = new ArrayList<>();
     protected ArrayList<Interactives> cmt = new ArrayList<Interactives>();
     protected int UserID;
+    
+    String dbURL = "jdbc:sqlserver://localhost:1433;DatabaseName=Social_Network";
+    String user = "sa";
+    String pass = "Password123@jkl#";
     
     public Users() {
     	
@@ -127,11 +132,17 @@ public class Users{
 		Email = email;
 	}
 
+	
 
+    public ArrayList<Blogs> getBlog() {
+		return blog;
+	}
 
+	public void setBlog(ArrayList<Blogs> blog) {
+		this.blog = blog;
+	}
 
-
-    public Users(Users a){
+	public Users(Users a){
         this.Username = a.Username;
         this.Password = a.Password;
         this.First_Name = a.First_Name;
@@ -148,9 +159,13 @@ public class Users{
 
     public boolean Login(String username, String password){
     	try {
-			Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
-    		String DB_URL = "jdbc:sqlserver://localhost:62673;databaseName=Social_Network;integratedSecurity=true;";
-    		Connection conn = DriverManager.getConnection(DB_URL);
+//			Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
+//    		String DB_URL = "jdbc:sqlserver://localhost:62673;databaseName=Social_Network;integratedSecurity=true;";
+//    		Connection conn = DriverManager.getConnection(DB_URL);
+    		
+    		Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver"); 
+            Connection conn = DriverManager.getConnection(dbURL, user, pass);
+    		
     		Statement stmt = conn.createStatement();
     		String getAllUser = "Select * From User_Social";
     		ResultSet r = stmt.executeQuery(getAllUser);
@@ -198,9 +213,13 @@ public class Users{
 
     public void SignUp(){
     	try {
-			Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
-    		String DB_URL = "jdbc:sqlserver://localhost:62673;databaseName=Social_Network;integratedSecurity=true;";
-    		Connection conn = DriverManager.getConnection(DB_URL);
+//			Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
+//    		String DB_URL = "jdbc:sqlserver://localhost:1433;databaseName=Social_Network;integratedSecurity=true;";
+//    		Connection conn = DriverManager.getConnection(DB_URL);
+    		
+    		Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver"); 
+            Connection conn = DriverManager.getConnection(dbURL, user, pass);
+    		
     		Statement stmt = conn.createStatement();
     	
     		String insert = "Insert Into User_Social Values('" + this.getFirst_Name() + "','"
@@ -244,20 +263,17 @@ public class Users{
     	this.blog.clear();
     	try {
 //			Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
-//    		String DB_URL = "jdbc:sqlserver://localhost:62673;databaseName=Social_Network;integratedSecurity=true;";
+//    		String DB_URL = "jdbc:sqlserver://localhost:1433;databaseName=Social_Network;integratedSecurity=true;";    		
+//    		Connection conn = DriverManager.getConnection(DB_URL);
     		
-    		Class.forName("com.mysql.cj.jdbc.Driver"); 
-    		final String DB_URL = "jdbc:mysql://localhost/Social_Network";
-    		final String USER = "root"; 
-    		final String PASSWORD = "hoangnam"; 
+    		Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver"); 
+            Connection conn = DriverManager.getConnection(dbURL, user, pass);
     		
-    		// Connection conn = DriverManager.getConnection(DB_URL);
-    		Connection conn = DriverManager.getConnection(DB_URL, USER, PASSWORD); 
-    		Statement stmt = conn.createStatement();
-    		String getAllUser = "Select * From Blog";
-    		ResultSet r = stmt.executeQuery(getAllUser);
+    		String sql = "SELECT * FROM Blog WHERE DeleteBlog = 0"; 
+    		PreparedStatement ps = conn.prepareStatement(sql); 
+			ResultSet r = ps.executeQuery(); 
 			while(r.next()) {
-				if(r.getString("Username").equals(this.Username))
+				/*if(r.getString("Username").equals(this.Username))
 				{
 					BlogStatus stt = new BlogStatus();
 					stt.set(r.getBoolean("Edit"));
@@ -266,12 +282,17 @@ public class Users{
 							r.getString("Date_of_blog"),r.getBoolean("Edit"), stt);
 					b.getAllCmnt();
 					this.blog.add(b);
-				}
+				} */ 
 				
+				BlogStatus stt = new BlogStatus();
+				stt.set(r.getBoolean("Edit"));
+				Blogs b = new Blogs(r.getString("Title"),r.getInt("BlogID"), r.getString("Username"),
+						r.getString("Body"), r.getBoolean("CommentEnabled"),r.getBoolean("DeleteBlog"),
+						r.getString("Date_of_blog"),r.getBoolean("Edit"), stt);
+				// b.getAllCmnt();
+				this.blog.add(b);
 				
 			}
-			r.close();
-    		
     		
 		}catch(ClassNotFoundException ex)
 		{
@@ -320,9 +341,13 @@ public class Users{
     
     public boolean PostBlog(Blogs b){
     	try {
-			Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
-    		String DB_URL = "jdbc:sqlserver://localhost:62673;databaseName=Social_Network;integratedSecurity=true;";
-    		Connection conn = DriverManager.getConnection(DB_URL);
+//			Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
+//    		String DB_URL = "jdbc:sqlserver://localhost:62673;databaseName=Social_Network;integratedSecurity=true;";
+//    		Connection conn = DriverManager.getConnection(DB_URL);
+    		
+    		Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver"); 
+            Connection conn = DriverManager.getConnection(dbURL, user, pass);
+    		
     		Statement stmt = conn.createStatement();
     		int Hitcmt = 0;
     		int HitLike = 0;

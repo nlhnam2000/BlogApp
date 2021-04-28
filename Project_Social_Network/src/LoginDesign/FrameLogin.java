@@ -1,10 +1,13 @@
 package LoginDesign;
 
 import java.awt.BorderLayout;
+
+// import file from other package
 import Blog.*;
 import java.awt.EventQueue;
 import User.Users;
 import HashPw.*;
+import PageHome.PageHome;
 
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
@@ -69,17 +72,27 @@ public class FrameLogin extends JFrame {
 	
 	public static boolean check_existe_user(String username, String password) {
 		try {
-			Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
-    		String DB_URL = "jdbc:sqlserver://localhost:62673;databaseName=Social_Network;integratedSecurity=true;";
-    		Connection conn = DriverManager.getConnection(DB_URL);
+//			Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
+//    		String DB_URL = "jdbc:sqlserver://localhost:62673;databaseName=Social_Network;integratedSecurity=true;";
+//    		Connection conn = DriverManager.getConnection(DB_URL);
+			
+			String dbURL = "jdbc:sqlserver://localhost:1433;DatabaseName=Social_Network";
+			String user = "sa"; 
+			String pass = "Password123@jkl#"; 
+			Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver"); 
+            Connection conn = DriverManager.getConnection(dbURL, user, pass);
+			
     		Statement stmt = conn.createStatement();
     		String getAllUser = "Select * From User_Social";
     		ResultSet r = stmt.executeQuery(getAllUser);
 			while(r.next()) {
 				if(r.getString("Username").equals(username) && BCrypt.checkpw(password, r.getString("Passwork"))) {
-					
 					return true;
 				}
+				else if (r.getString("Username").equals(username) == false || BCrypt.checkpw(password, r.getString("Passwork")) == false) {
+					return false;
+				}
+	
 			}
 			r.close();
     		
@@ -198,11 +211,15 @@ public class FrameLogin extends JFrame {
 						loginMessager.setText("");
 						
 						
-						BlogFrame b = new BlogFrame(FrameLogin.this.user, FrameLogin.this.user.getUserID());
-						FrameLogin.this.dispose();
-					
+//						BlogFrame b = new BlogFrame(FrameLogin.this.user, FrameLogin.this.user.getUserID());
+//						FrameLogin.this.dispose();
+//					
+//						b.setVisible(true);
 						
-						b.setVisible(true);
+						// redirect to home page: 
+						PageHome pageHome = new PageHome(FrameLogin.this.user); 
+						FrameLogin.this.dispose();
+						pageHome.setVisible(true);
 						
 					}
 					else {

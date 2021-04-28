@@ -53,7 +53,10 @@ public class FrameSignUp extends JFrame {
 	private JRadioButton MaleRadioButton = new JRadioButton("Male");
 	private JLabel check_sex = new JLabel("");
 	
-	
+	static String dbURL = "jdbc:sqlserver://localhost:1433;DatabaseName=Social_Network";
+    static String user = "sa";
+    static String pass = "Password123@jkl#";
+
 	
 	// Check date of birth
 	public static boolean check_date(String d) {
@@ -77,9 +80,14 @@ public class FrameSignUp extends JFrame {
 	
 	public static boolean check_existe_user(String username) {
 		try {
-			Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
-    		String DB_URL = "jdbc:sqlserver://localhost:62673;databaseName=Social_Network;integratedSecurity=true;";
-    		Connection conn = DriverManager.getConnection(DB_URL);
+//			Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
+//    		String DB_URL = "jdbc:sqlserver://localhost:62673;databaseName=Social_Network;integratedSecurity=true;";
+//    		Connection conn = DriverManager.getConnection(DB_URL);
+			
+			
+			Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver"); 
+            Connection conn = DriverManager.getConnection(dbURL, user, pass);
+			
     		Statement stmt = conn.createStatement();
     		String getAllUser = "Select * From User_Social";
     		ResultSet r = stmt.executeQuery(getAllUser);
@@ -344,6 +352,8 @@ public class FrameSignUp extends JFrame {
 		    		String hashpw = BCrypt.hashpw(password, BCrypt.gensalt(12));
 		    		Users u = new Users(username, hashpw, firstname, lastname, date_of_birth, adress, email);
 			    	u.SignUp();	
+			    	
+			    	
 		    		
 					txtfirstname.setText("");
 		    		txtlastname.setText("");
