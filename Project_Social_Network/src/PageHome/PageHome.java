@@ -129,7 +129,7 @@ public class PageHome extends JFrame implements ActionListener {
 		sidebarScroll.setBorder(null);
 		sidebarScroll.setPreferredSize(new Dimension(200, 700));
 		sidebarScroll.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
-		
+ 		
 		
 		ArrayList<JLabel> titleBlog = showBlogTitle(blogList); 
 		for (JLabel title : titleBlog) {
