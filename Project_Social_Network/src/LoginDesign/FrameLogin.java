@@ -72,7 +72,7 @@ public class FrameLogin extends JFrame {
 	
 	public static boolean check_existe_user(String username, String password) {
 		try {
-//			Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
+			Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
 //    		String DB_URL = "jdbc:sqlserver://localhost:62673;databaseName=Social_Network;integratedSecurity=true;";
 //    		Connection conn = DriverManager.getConnection(DB_URL);
 			

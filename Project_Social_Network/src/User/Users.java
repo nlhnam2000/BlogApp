@@ -263,7 +263,7 @@ public class Users{
     	this.blog.clear();
     	try {
 //			Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
-//    		String DB_URL = "jdbc:sqlserver://localhost:1433;databaseName=Social_Network;integratedSecurity=true;";    		
+//    		String DB_URL = "jdbc:sqlserver://localhost:62673;databaseName=Social_Network;integratedSecurity=true;";    		
 //    		Connection conn = DriverManager.getConnection(DB_URL);
     		
     		Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver"); 
