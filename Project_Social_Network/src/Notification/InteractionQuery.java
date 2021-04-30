@@ -27,7 +27,7 @@ public class InteractionQuery {
 	public void getAllNoticeById(String id) {
 		try {
 			Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
-    		String DB_URL = "jdbc:sqlserver://localhost:1433;databaseName=Social_Network;integratedSecurity=true;";
+    		String DB_URL = "jdbc:sqlserver://localhost:62673;databaseName=Social_Network;integratedSecurity=true;";
     		Connection conn = DriverManager.getConnection(DB_URL);
     		Statement stmt = conn.createStatement();
     		String getAllUser = "Select * From Interaction Where blogOwnerId = \'" + id + "\'";

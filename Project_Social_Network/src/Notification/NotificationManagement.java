@@ -35,7 +35,7 @@ import com.toedter.calendar.JMonthChooser;
 import com.toedter.calendar.JYearChooser;
 
 public class NotificationManagement extends JFrame {
-	private static final String id = "4";
+	private static final String id = "3";
 	private ArrayList<Interaction> noticeList;
 	private ImageIcon edit = new ImageIcon("src/FrameImages/edit.jpg");
 	private JPanel contentPane;
@@ -90,8 +90,9 @@ public class NotificationManagement extends JFrame {
 		noticeQuery.getAllNoticeById(NotificationManagement.this.id);
 		this.noticeList = noticeQuery.getNotice();
 		String[] values = new String[noticeList.size()];
-		System.out.println(noticeList.get(0).getBlogId());
+	//	System.out.println(noticeList.get(0).getBlogId());
 		int j = 0;
+		
 		for (int i = noticeList.size() - 1; i >= 0; i--) {
 			DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.0");  
 			LocalDateTime now = LocalDateTime.now();
