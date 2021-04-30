@@ -1,6 +1,7 @@
 package PageHome;
 
 import java.time.*;
+
 import java.awt.*;
 
 import java.awt.event.ActionEvent;
@@ -13,6 +14,7 @@ import javax.swing.border.EmptyBorder;
 
 import User.Users;
 import Blog.Blogs;
+import Blog.postBlogFrame;
 import Status.BlogStatus;
 
 import java.util.*;
@@ -27,6 +29,7 @@ public class PageHome extends JFrame implements ActionListener {
 	JLabel helloUser; 
 	static Users user; 
 	ArrayList<Blogs> blogList = new ArrayList<>();
+	
 
 	/**
 	 * Launch the application.
@@ -48,6 +51,7 @@ public class PageHome extends JFrame implements ActionListener {
 	/**
 	 * Create the frame.
 	 */
+	
 	public PageHome(Users u) {
 		
 		user = new Users(u);
@@ -231,10 +235,11 @@ public class PageHome extends JFrame implements ActionListener {
 //					+ "This is body This is body This is body This is body This is body This is body This is body "
 //					+ "This is body This is body This is body This is body This is body This is body This is body"; 
 			
-			Blogs blog = new Blogs("Post 3", user.getUsername(), "Posting blog 3", true, false, String.valueOf(date), false, status); 
-			user.PostBlog(blog); 
+//			Blogs blog = new Blogs("Post 3", user.getUsername(), "Posting blog 3", true, false, String.valueOf(date), false, status); 
+//			user.PostBlog(blog); 
+			
+			postBlogFrame pbf = new postBlogFrame(user); 
+			pbf.setVisible(true);
 		}
 	}
-	
-
 }
