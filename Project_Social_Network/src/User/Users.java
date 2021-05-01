@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import Blog.*;
 import Interactive.*;
 import LoginDesign.FrameLogin;
+import Notification.Interaction;
 import Query.QuerySQL;
 import HashPw.BCrypt;
 import Status.*;
@@ -159,12 +160,12 @@ public class Users{
 
     public boolean Login(String username, String password){
     	try {
-//			Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
-//    		String DB_URL = "jdbc:sqlserver://localhost:62673;databaseName=Social_Network;integratedSecurity=true;";
-//    		Connection conn = DriverManager.getConnection(DB_URL);
-    		
-    		Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver"); 
-            Connection conn = DriverManager.getConnection(dbURL, user, pass);
+			Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
+    		String DB_URL = "jdbc:sqlserver://localhost:62673;databaseName=Social_Network;integratedSecurity=true;";
+    		Connection conn = DriverManager.getConnection(DB_URL);
+//    		
+//    		Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver"); 
+//            Connection conn = DriverManager.getConnection(dbURL, user, pass);
     		
     		Statement stmt = conn.createStatement();
     		String getAllUser = "Select * From User_Social";
@@ -406,7 +407,7 @@ public class Users{
     	
     }
 
-    public boolean PostCmt(Interactives inter){
+    public boolean PostCmt(Interactives inter, Interaction notice){
     	try {
 			Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
     		String DB_URL = "jdbc:sqlserver://localhost:62673;databaseName=Social_Network;integratedSecurity=true;";
@@ -425,7 +426,13 @@ public class Users{
     			String insert = "Insert Into Comment Values(" + this.UserID + ",'" + inter.get_Username()+ "','" +
     		    		inter.getUsernameBlog() + "'," + inter.get_BlogID() + ",'" + inter.get_Body() + "'," + delete
     		    		 + "," + edit + ",'" + inter.get_Date() + "','" + "" + "')";
+    			String noti = notice.getVisitor() + " has comment on blog of " + notice.getUsername() ;
+    			notice.setNotice(noti);
+    			String insert_notice = "Insert Into Interaction Values(" + notice.getVisitorId() + ",'" +
+    			notice.getVisitor() + "'," + notice.getUsernameId() + ",'" + notice.getUsername() + "'," + notice.getBlogId()
+    			+ ",'"+notice.getDate()+"','" + notice.getNotice() + "')";
     		    stmt.executeUpdate(insert);
+    		    stmt.executeUpdate(insert_notice);
     		    conn.commit();
     		    return true;
     		}
@@ -450,7 +457,7 @@ public class Users{
 
     }
 
-    public void LikeBlog(int blogID, String usernameBlog){
+    public void LikeBlog(int blogID, String usernameBlog, Interaction notice){
     	try {
 			Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
     		String DB_URL = "jdbc:sqlserver://localhost:62673;databaseName=Social_Network;integratedSecurity=true;";
@@ -472,18 +479,37 @@ public class Users{
     		
     		if(check) {
     			if(stt) {
-    				String update = "Update Set StatusLike =" + 0 + " Where UsernameID = " + this.UserID;
+    				String update = "Update LikeBlog Set StatusLike = " + 0 + " Where UsernameID = " + this.UserID;
     				stmt.executeUpdate(update);
+    				
+    				String noti = notice.getVisitor() + " has not like the blog of " + notice.getUsername() ;
+        			notice.setNotice(noti);
+        			String insert_notice = "Insert Into Interaction Values(" + notice.getVisitorId() + ",'" +
+        			notice.getVisitor() + "'," + notice.getUsernameId() + ",'" + notice.getUsername() + "'," + notice.getBlogId()
+        			+ ",'"+notice.getDate()+"','" + notice.getNotice() + "')";
+        			stmt.executeUpdate(insert_notice);
     			}
     			else {
-    				String update = "Update Set StatusLike =" + 1 + " Where UsernameID = " + this.UserID;
+    				String update = "Update LikeBlog Set StatusLike =" + 1 + " Where UsernameID = " + this.UserID;
     				stmt.executeUpdate(update);
+    				String noti = notice.getVisitor() + " has like the blog of " + notice.getUsername() ;
+        			notice.setNotice(noti);
+        			String insert_notice = "Insert Into Interaction Values(" + notice.getVisitorId() + ",'" +
+        			notice.getVisitor() + "'," + notice.getUsernameId() + ",'" + notice.getUsername() + "'," + notice.getBlogId()
+        			+ ",'"+notice.getDate()+"','" + notice.getNotice() + "')";
+        			stmt.executeUpdate(insert_notice);
     			}
     		}
     		else {
     			String insert = "Insert Into LikeBlog Values(" + this.UserID + ",'" + this.Username + "',"
     					+ 1 + ",'" + usernameBlog + "'," + blogID + ")";
     			stmt.executeUpdate(insert);
+    			String noti = notice.getVisitor() + "has like the blog of " + notice.getUsername() ;
+    			notice.setNotice(noti);
+    			String insert_notice = "Insert Into Interaction Values(" + notice.getVisitorId() + ",'" +
+    			notice.getVisitor() + "'," + notice.getUsernameId() + ",'" + notice.getUsername() + "'," + notice.getBlogId()
+    			+ ",'"+notice.getDate()+"','" + notice.getNotice() + "')";
+    			stmt.executeUpdate(insert_notice);
     		}
     		
     		conn.commit();
