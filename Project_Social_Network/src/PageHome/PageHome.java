@@ -109,10 +109,11 @@ public class PageHome extends JFrame implements ActionListener {
 		
 		scrollPanel.setLayout(new BoxLayout(scrollPanel, BoxLayout.PAGE_AXIS));
 		scrollPanel.setBackground(contentPane.getBackground());
+		// scrollPanel.setPreferredSize(new Dimension(600, 700));
 		JScrollPane scrollPane = new JScrollPane(scrollPanel); 
 		scrollPane.setBorder(null);
-		// scrollPane.setPreferredSize(new Dimension(600, 700));
-		scrollPane.getViewport().setPreferredSize(new Dimension(600, 700));
+		scrollPane.setPreferredSize(new Dimension(600, 700));
+		// scrollPane.getViewport().setPreferredSize(new Dimension(600, 700));
 		scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
 		
 		user.getAllBlog();
@@ -124,6 +125,45 @@ public class PageHome extends JFrame implements ActionListener {
 			scrollPanel.add(Box.createRigidArea(new Dimension(0,10))); 
 		}
 		
+//		for (int i = 0; i < 30; i++) {
+//			JPanel panel = new JPanel(); 
+//			panel.setLayout(new BoxLayout(panel, BoxLayout.PAGE_AXIS));
+//			// panel.setPreferredSize(new Dimension(400, 100));
+//			panel.setBackground(Color.white);
+//			panel.setBorder(BorderFactory.createLineBorder(Color.black));
+//			
+//			JPanel subPanel = new JPanel(); 
+//			subPanel.setLayout(new FlowLayout(FlowLayout.LEFT));
+//			subPanel.setBackground(Color.white);
+//			JLabel titleLabel = new JLabel("Hello"); 
+//			titleLabel.setFont(new Font("Tahoma", Font.BOLD, 15));
+//			JLabel usernameLabel = new JLabel("• Posted by " ); 
+//			subPanel.add(titleLabel); 
+//			subPanel.add(usernameLabel); 
+//			
+//			JPanel bodyPanel = new JPanel();
+//			bodyPanel.setLayout(new FlowLayout(FlowLayout.LEFT));
+//			bodyPanel.setBackground(Color.white);
+//			JLabel bodyPost = new JLabel("<html>weurgfuyqwerguywegrfyuewrfvueywfbryweurbfuweyrb<br>fowieurbfuowyevfwebfripuwebrfipubwerfiweurbf</html>"); 
+//			bodyPanel.add(bodyPost); 
+//			
+//			JPanel buttonPanel = new JPanel(); 
+//			buttonPanel.setLayout(new FlowLayout());
+//			buttonPanel.setBackground(panel.getBackground());
+//			JButton likeButton = new JButton("Like"); 
+//			JButton commentButton = new JButton("Comment"); 
+//			buttonPanel.add(likeButton); 
+//			buttonPanel.add(commentButton); 
+//			
+//			panel.add(subPanel); 
+//			panel.add(bodyPanel); 
+//			panel.add(buttonPanel); 
+//			
+//			scrollPanel.add(panel); 
+//			scrollPanel.add(Box.createHorizontalStrut(15)); 
+//		}
+		
+		
 		container.add(scrollPane, gbc); 
 		
 		sidebarPanel.setLayout(new BoxLayout(sidebarPanel, BoxLayout.PAGE_AXIS));
@@ -132,8 +172,13 @@ public class PageHome extends JFrame implements ActionListener {
 		JScrollPane sidebarScroll = new JScrollPane(sidebarPanel); 
 		sidebarScroll.setBorder(null);
 		sidebarScroll.setPreferredSize(new Dimension(200, 700));
-		sidebarScroll.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+		sidebarScroll.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_NEVER);
  		
+		sidebarPanel.add(Box.createRigidArea(new Dimension(0, 15))); 
+		JLabel text = new JLabel("MOST RECENT BLOG"); 
+		text.setFont(new Font("Tahoma", Font.BOLD, 15));
+		sidebarPanel.add(text);
+		sidebarPanel.add(Box.createRigidArea(new Dimension(30, 20))); 
 		
 		ArrayList<JLabel> titleBlog = showBlogTitle(blogList); 
 		for (JLabel title : titleBlog) {
@@ -147,6 +192,7 @@ public class PageHome extends JFrame implements ActionListener {
 //			panel.setBorder(BorderFactory.createLineBorder(Color.black));
 //			panel.add(label); 
 //			sidebarPanel.add(Box.createRigidArea(new Dimension(0,10))); 
+//			sidebarPanel.add(panel);
 //		}
 		
 		gbc.gridx = 1; 
@@ -171,7 +217,7 @@ public class PageHome extends JFrame implements ActionListener {
 		for (Blogs blog : list) {
 			JPanel panel = new JPanel(); 
 			panel.setLayout(new BoxLayout(panel, BoxLayout.PAGE_AXIS));
-			// panel.setPreferredSize(new Dimension(400, 100));
+			// panel.setPreferredSize(new Dimension(590, 100));
 			panel.setBackground(Color.white);
 			panel.setBorder(BorderFactory.createLineBorder(Color.black));
 			
@@ -179,6 +225,7 @@ public class PageHome extends JFrame implements ActionListener {
 			subPanel.setLayout(new FlowLayout(FlowLayout.LEFT));
 			subPanel.setBackground(Color.white);
 			JLabel titleLabel = new JLabel(blog.get_Title()); 
+			titleLabel.setFont(new Font("Tahoma", Font.BOLD, 15));
 			JLabel usernameLabel = new JLabel("• Posted by " + blog.get_Username()); 
 			subPanel.add(titleLabel); 
 			subPanel.add(usernameLabel); 
@@ -186,11 +233,27 @@ public class PageHome extends JFrame implements ActionListener {
 			JPanel bodyPanel = new JPanel();
 			bodyPanel.setLayout(new FlowLayout(FlowLayout.LEFT));
 			bodyPanel.setBackground(Color.white);
-			JLabel bodyPost = new JLabel(blog.get_Body()); 
-			bodyPanel.add(bodyPost); 
+			
+			// if the body is too long, break the lines
+			if (blog.get_Body().length() >= 80) {
+				String text = "<html>"; 
+				for (int i = 0; i < blog.get_Body().length(); i++) {
+					text += blog.get_Body().charAt(i); 
+					if (text.length() % 80 == 0) {
+						text += "<br>"; 
+					}
+				}
+				text += "</html"; 
+				JLabel bodyPost = new JLabel(text); 
+				bodyPanel.add(bodyPost); 
+			} 
+			else { // just show it otherwise
+				JLabel bodyPost = new JLabel(blog.get_Body()); 
+				bodyPanel.add(bodyPost); 
+			}
 			
 			JPanel buttonPanel = new JPanel(); 
-			buttonPanel.setLayout(new FlowLayout());
+			buttonPanel.setLayout(new FlowLayout(FlowLayout.LEFT));
 			buttonPanel.setBackground(panel.getBackground());
 			JButton likeButton = new JButton("Like"); 
 			JButton commentButton = new JButton("Comment"); 
@@ -215,6 +278,16 @@ public class PageHome extends JFrame implements ActionListener {
 		}
 		
 		return titleLabel; 
+	}
+	
+	public JLabel LabelReduction(String text) {
+		JLabel label = new JLabel("<html>"); 
+		
+		
+		
+		
+		
+		return label; 
 	}
 
 	@Override
