@@ -7,7 +7,11 @@ import Blog.*;
 import java.awt.EventQueue;
 import User.Users;
 import HashPw.*;
+import Interactive.Interactives;
+import Interactive.LikeBlog;
+import Notification.Interaction;
 import PageHome.PageHome;
+import Status.BlogStatus;
 
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
@@ -69,19 +73,26 @@ public class FrameLogin extends JFrame {
 		});
 	}
 
+	public String getDate() {
+		String date = "";
+	
+		date = java.time.LocalDate.now().toString() + " " + java.time.LocalTime.now().getHour() + ":"
+				+ java.time.LocalTime.now().getMinute() + ":" + java.time.LocalTime.now().getSecond();
+		return date;
+	}
 	
 	public static boolean check_existe_user(String username, String password) {
 		try {
 			Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
-//    		String DB_URL = "jdbc:sqlserver://localhost:62673;databaseName=Social_Network;integratedSecurity=true;";
-//    		Connection conn = DriverManager.getConnection(DB_URL);
-			
-			String dbURL = "jdbc:sqlserver://localhost:1433;DatabaseName=Social_Network";
-			String user = "sa"; 
-			String pass = "Password123@jkl#"; 
-			Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver"); 
-            Connection conn = DriverManager.getConnection(dbURL, user, pass);
-			
+    		String DB_URL = "jdbc:sqlserver://localhost:62673;databaseName=Social_Network;integratedSecurity=true;";
+    		Connection conn = DriverManager.getConnection(DB_URL);
+//			
+//			String dbURL = "jdbc:sqlserver://localhost:1433;DatabaseName=Social_Network";
+//			String user = "sa"; 
+//			String pass = "Password123@jkl#"; 
+//			Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver"); 
+//            Connection conn = DriverManager.getConnection(dbURL, user, pass);
+//			
     		Statement stmt = conn.createStatement();
     		String getAllUser = "Select * From User_Social";
     		ResultSet r = stmt.executeQuery(getAllUser);
@@ -209,7 +220,13 @@ public class FrameLogin extends JFrame {
 					{
 						JOptionPane.showMessageDialog(null,"Login successfully");
 						loginMessager.setText("");
+						System.out.println(getDate());
 						
+					//	Interactives cmt = new Interactives(FrameLogin.this.user.getUsername(),1,"Bai viet rat hay va thu vi",true, true, getDate(),"username");
+						Interaction notice = new Interaction(3,"username",FrameLogin.this.user.getUserID(),FrameLogin.this.user.getUsername(),
+						1,getDate(),"");
+						FrameLogin.this.user.LikeBlog(1, "username", notice);
+//						FrameLogin.this.user.PostCmt(cmt, notice);
 						
 //						BlogFrame b = new BlogFrame(FrameLogin.this.user, FrameLogin.this.user.getUserID());
 //						FrameLogin.this.dispose();
@@ -217,9 +234,9 @@ public class FrameLogin extends JFrame {
 //						b.setVisible(true);
 						
 						// redirect to home page: 
-						PageHome pageHome = new PageHome(FrameLogin.this.user); 
-						FrameLogin.this.dispose();
-						pageHome.setVisible(true);
+//						PageHome pageHome = new PageHome(FrameLogin.this.user); 
+//						FrameLogin.this.dispose();
+//						pageHome.setVisible(true);
 						
 					}
 					else {

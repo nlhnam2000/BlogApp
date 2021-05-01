@@ -21,6 +21,17 @@ public class Interaction {
 		this.date = date;
 		this.notice = notice;
 	}
+	public Interaction(int usernameId, String username, int visitorId, String visitor, int blogId,
+			String date, String notice) {
+		
+		this.username = username;
+		this.usernameId = usernameId;
+		this.visitor = visitor;
+		this.visitorId = visitorId;
+		this.blogId = blogId;
+		this.date = date;
+		this.notice = notice;
+	}
 
 	public int getId() {
 		return id;
