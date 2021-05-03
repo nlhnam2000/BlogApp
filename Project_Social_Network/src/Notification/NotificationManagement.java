@@ -2,9 +2,12 @@ package Notification;
 
 import java.awt.BorderLayout;
 
+
 import java.awt.Color;
 import java.awt.EventQueue;
 import java.awt.Font;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.Period;
@@ -34,9 +37,12 @@ import javax.swing.ListSelectionModel;
 import javax.swing.JTextField;
 import com.toedter.calendar.JMonthChooser;
 import com.toedter.calendar.JYearChooser;
+import User.Users;
+import PageHome.PageHome;
 
-public class NotificationManagement extends JFrame {
-	private static final String id = "3";
+public class NotificationManagement extends JFrame implements ActionListener {
+	// private static final int id = 2;
+	static Users user; 
 	private ArrayList<Interaction> noticeList;
 	private ImageIcon edit = new ImageIcon("src/FrameImages/edit.jpg");
 	private JPanel contentPane;
@@ -45,22 +51,23 @@ public class NotificationManagement extends JFrame {
 	private JLabel lblOptimize;
 	private JTextField textField;
 	
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					NotificationManagement frame = new NotificationManagement();
-					frame.showInfo();
-					frame.showNotification();
-					frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
+//	public static void main(String[] args) {
+//		EventQueue.invokeLater(new Runnable() {
+//			public void run() {
+//				try {
+//					NotificationManagement frame = new NotificationManagement();
+//					frame.showInfo();
+//					frame.showNotification();
+//					frame.setVisible(true);
+//				} catch (Exception e) {
+//					e.printStackTrace();
+//				}
+//			}
+//		});
+//	}
 
-	public void showInfo() {
+	public void showInfo(Users u) {
+		user = new Users(u);
 		JTextPane usernameProfile = new JTextPane();
 		usernameProfile.setFont(new Font("Tahoma", Font.PLAIN, 18));
 		usernameProfile.setBackground(new Color(135, 206, 235));
@@ -72,7 +79,8 @@ public class NotificationManagement extends JFrame {
 		subInfo.setBounds(150, 35, 500, 60);
 		
 		ProfileQuery profile = new ProfileQuery();
-		Account profileInfo = profile.getAllAccount(this.id);
+		// Account profileInfo = profile.getAllAccount(this.id);
+		Account profileInfo = profile.getAllAccount(user.getUserID());
 		System.out.println(profileInfo.getUsername());
 		usernameProfile.setText(profileInfo.getFirstName() + " " + profileInfo.getLastName() + " ( " + profileInfo.getUsername() + " )");
 		usernameProfile.setEditable(false);
@@ -88,7 +96,7 @@ public class NotificationManagement extends JFrame {
 	public void showNotification() {
 		InteractionQuery noticeQuery = new InteractionQuery();
 		this.noticeList = new ArrayList<Interaction>();
-		noticeQuery.getAllNoticeById(NotificationManagement.this.id);
+		noticeQuery.getAllNoticeById(user.getUserID());
 		this.noticeList = noticeQuery.getNotice();
 		String[] values = new String[noticeList.size()];
 	//	System.out.println(noticeList.get(0).getBlogId());
@@ -237,6 +245,16 @@ public class NotificationManagement extends JFrame {
 		btnEditImg.setBounds(498, 28, 65, 65);
 		contentPane.add(btnEditImg);
 		
+		// add action listener
+		btnHome.addActionListener(this);
 		
+	}
+
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		String command = e.getActionCommand(); 
+		if (command.equals("Homepage")) {
+			dispose();
+		}
 	}
 }

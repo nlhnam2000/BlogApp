@@ -19,12 +19,19 @@ public class ProfileQuery {
 	public void setAccountList(ArrayList<Account> account) {
 		this.account = account;
 	}
-	public Account getAllAccount(String id) {
+	public Account getAllAccount(int id) {
 		this.account.clear();
 		try {
-			Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
-			String DB_URL = "jdbc:sqlserver://localhost:62673;databaseName=Social_Network;integratedSecurity=true;";
-			Connection conn = DriverManager.getConnection(DB_URL);
+//			Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
+//			String DB_URL = "jdbc:sqlserver://localhost:62673;databaseName=Social_Network;integratedSecurity=true;";
+//			Connection conn = DriverManager.getConnection(DB_URL);
+			
+			String dbURL = "jdbc:sqlserver://localhost:1433;DatabaseName=Social_Network";
+			String user = "sa";
+			String pass = "Password123@jkl#";
+			Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver"); 
+	        Connection conn = DriverManager.getConnection(dbURL, user, pass);
+			
 			Statement stmt = conn.createStatement();
 			String getAllAccount = "Select * From User_Social Where UserId = " + id;
 			ResultSet result = stmt.executeQuery(getAllAccount);

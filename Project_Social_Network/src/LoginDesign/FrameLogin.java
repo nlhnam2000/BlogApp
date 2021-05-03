@@ -223,9 +223,9 @@ public class FrameLogin extends JFrame {
 						System.out.println(getDate());
 						
 					//	Interactives cmt = new Interactives(FrameLogin.this.user.getUsername(),1,"Bai viet rat hay va thu vi",true, true, getDate(),"username");
-						Interaction notice = new Interaction(3,"username",FrameLogin.this.user.getUserID(),FrameLogin.this.user.getUsername(),
-						1,getDate(),"");
-						FrameLogin.this.user.LikeBlog(1, "username", notice);
+//						Interaction notice = new Interaction(3,"username",FrameLogin.this.user.getUserID(),FrameLogin.this.user.getUsername(),
+//						1,getDate(),"");
+//						FrameLogin.this.user.LikeBlog(1, "username", notice);
 //						FrameLogin.this.user.PostCmt(cmt, notice);
 						
 //						BlogFrame b = new BlogFrame(FrameLogin.this.user, FrameLogin.this.user.getUserID());
@@ -234,9 +234,9 @@ public class FrameLogin extends JFrame {
 //						b.setVisible(true);
 						
 						// redirect to home page: 
-//						PageHome pageHome = new PageHome(FrameLogin.this.user); 
-//						FrameLogin.this.dispose();
-//						pageHome.setVisible(true);
+						PageHome pageHome = new PageHome(FrameLogin.this.user); 
+						FrameLogin.this.dispose();
+						pageHome.setVisible(true);
 						
 					}
 					else {
