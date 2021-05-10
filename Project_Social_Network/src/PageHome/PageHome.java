@@ -3,6 +3,7 @@ package PageHome;
 import java.time.*;
 
 
+
 import java.awt.*;
 
 import java.awt.event.ActionEvent;
@@ -18,6 +19,7 @@ import javax.swing.border.EmptyBorder;
 import User.Users;
 import Blog.Blogs;
 import Blog.postBlogFrame;
+import Blog.BlogFrame;
 import Status.BlogStatus;
 import Notification.NotificationManagement;
 
@@ -211,8 +213,12 @@ public class PageHome extends JFrame implements ActionListener {
 			JLabel titleLabel = new JLabel(blog.get_Title()); 
 			titleLabel.setFont(new Font("Tahoma", Font.BOLD, 15));
 			JLabel usernameLabel = new JLabel("• Posted by " + blog.get_Username()); 
+			JLabel datePosted = new JLabel(" at " + blog.get_Date()); 
+			datePosted.setForeground(Color.gray);
 			subPanel.add(titleLabel); 
 			subPanel.add(usernameLabel); 
+			subPanel.add(datePosted); 
+			
 			
 			JPanel bodyPanel = new JPanel();
 			bodyPanel.setLayout(new FlowLayout(FlowLayout.LEFT));
@@ -227,7 +233,7 @@ public class PageHome extends JFrame implements ActionListener {
 						text += "<br>"; 
 					}
 				}
-				text += "</html"; 
+				text += "</html>"; 
 				JLabel bodyPost = new JLabel(text); 
 				bodyPanel.add(bodyPost); 
 			} 
@@ -256,7 +262,17 @@ public class PageHome extends JFrame implements ActionListener {
 			
 			
 			blogPanel.add(panel); 
+			
+			// add mouse listener for this whole panel
+			panel.addMouseListener(new MouseAdapter() {
+				public void mouseClicked(MouseEvent e) {
+					BlogFrame blogFrame = new BlogFrame(blog); 
+					blogFrame.setVisible(true);
+				}
+			});
 		}
+		
+		
 		return blogPanel; 
 	}
 	

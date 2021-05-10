@@ -1,12 +1,14 @@
 package User;
 
 import java.sql.Connection;
+
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.time.LocalDate;
 
 import Blog.*;
 import Interactive.*;
@@ -292,9 +294,11 @@ public class Users{
 						r.getString("Date_of_blog"),r.getBoolean("Edit"), stt);
 				// b.getAllCmnt();
 				this.blog.add(b);
-				
 			}
-    		
+			
+			// sort by date
+			sortBlogByDate(this.blog); 
+			
 		}catch(ClassNotFoundException ex)
 		{
 			System.out.println("Error: unable to load driver class.");
@@ -303,6 +307,24 @@ public class Users{
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
+    }
+    
+    public void sortBlogByDate(ArrayList<Blogs> listBlog) {
+    	// ArrayList<Blogs> sorted = new ArrayList<>(); 
+    	for (int i = 0; i < listBlog.size() - 1; i++) {
+    		for (int j = i; j < listBlog.size(); j++) {
+    			LocalDate date1 = LocalDate.parse(listBlog.get(i).get_Date()); 
+    			LocalDate date2 = LocalDate.parse(listBlog.get(j).get_Date());
+    			if (date1.compareTo(date2) < 0) { // less than
+    				Blogs temp = listBlog.get(i); 
+    				listBlog.set(i, listBlog.get(j)); 
+    				listBlog.set(j, temp); 
+    			}
+    		}
+    	}
+    	
+    	
+    	// return sorted; 
     }
     
     public void getAllCmt() {
