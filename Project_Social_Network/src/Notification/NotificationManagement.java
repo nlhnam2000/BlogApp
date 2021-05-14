@@ -80,7 +80,7 @@ public class NotificationManagement extends JFrame implements ActionListener {
 		
 		ProfileQuery profile = new ProfileQuery();
 		// Account profileInfo = profile.getAllAccount(this.id);
-		Account profileInfo = profile.getAllAccount(user.getUserID());
+		Account profileInfo = profile.getAllAccount(user.getUserID() + "");
 		System.out.println(profileInfo.getUsername());
 		usernameProfile.setText(profileInfo.getFirstName() + " " + profileInfo.getLastName() + " ( " + profileInfo.getUsername() + " )");
 		usernameProfile.setEditable(false);

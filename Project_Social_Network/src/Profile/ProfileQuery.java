@@ -19,7 +19,7 @@ public class ProfileQuery {
 	public void setAccountList(ArrayList<Account> account) {
 		this.account = account;
 	}
-	public Account getAllAccount(int id) {
+	public Account getAllAccount(String id) {
 		this.account.clear();
 		try {
 //			Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");

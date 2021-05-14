@@ -162,12 +162,12 @@ public class Users{
 
     public boolean Login(String username, String password){
     	try {
-//			Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
-//    		String DB_URL = "jdbc:sqlserver://localhost:62673;databaseName=Social_Network;integratedSecurity=true;";
-//    		Connection conn = DriverManager.getConnection(DB_URL);
+			Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
+    		String DB_URL = "jdbc:sqlserver://localhost:62673;databaseName=Social_Network;integratedSecurity=true;";
+    		Connection conn = DriverManager.getConnection(DB_URL);
  		
-    		Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver"); 
-            Connection conn = DriverManager.getConnection(dbURL, user, pass);
+//    		Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver"); 
+//            Connection conn = DriverManager.getConnection(dbURL, user, pass);
     		
     		Statement stmt = conn.createStatement();
     		String getAllUser = "Select * From User_Social";
@@ -265,13 +265,13 @@ public class Users{
     public void getAllBlog() {
     	this.blog.clear();
     	try {
-//			Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
-//    		String DB_URL = "jdbc:sqlserver://localhost:62673;databaseName=Social_Network;integratedSecurity=true;";    		
-//    		Connection conn = DriverManager.getConnection(DB_URL);
+			Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
+    		String DB_URL = "jdbc:sqlserver://localhost:62673;databaseName=Social_Network;integratedSecurity=true;";    		
+    		Connection conn = DriverManager.getConnection(DB_URL);
     		
-    		Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver"); 
-            Connection conn = DriverManager.getConnection(dbURL, user, pass);
-    		
+//    		Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver"); 
+//            Connection conn = DriverManager.getConnection(dbURL, user, pass);
+//    		
     		String sql = "SELECT * FROM Blog WHERE DeleteBlog = 0"; 
     		PreparedStatement ps = conn.prepareStatement(sql); 
 			ResultSet r = ps.executeQuery(); 

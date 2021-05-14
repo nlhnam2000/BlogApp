@@ -28,6 +28,9 @@ import javax.swing.JMenu;
 import javax.swing.JOptionPane;
 
 import com.toedter.calendar.JDateChooser;
+
+import HashPw.BCrypt;
+
 import javax.swing.JMenuBar;
 
 public class AddForm extends JFrame {
@@ -149,7 +152,8 @@ public class AddForm extends JFrame {
 				String username = tfield_username.getText();
 				String firstname = tfield_firstname.getText();
 				String lastname = tfield_lastname.getText();
-				String password = pfield_password.getText();
+				String convert_password = pfield_password.getText();
+				String password = BCrypt.hashpw(convert_password, BCrypt.gensalt(12));
 				String address = tfield_address.getText();
 				String email = tfield_email.getText();
 				DateFormat df = new SimpleDateFormat("yyyy-MM-dd");

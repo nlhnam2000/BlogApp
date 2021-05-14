@@ -30,6 +30,9 @@ import javax.swing.JMenu;
 import javax.swing.JOptionPane;
 
 import com.toedter.calendar.JDateChooser;
+
+import HashPw.BCrypt;
+
 import javax.swing.JMenuBar;
 
 public class UpdateForm extends JFrame {
@@ -158,7 +161,8 @@ public class UpdateForm extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				String id = tfield_id.getText();
 				String username = tfield_username.getText();
-				String password = pfield_password.getText();
+				String convert_password = pfield_password.getText();
+				String password = BCrypt.hashpw(convert_password, BCrypt.gensalt(12));
 				String firstname = tfield_firstname.getText();
 				String lastname = tfield_lastname.getText();
 				String address = tfield_address.getText();
