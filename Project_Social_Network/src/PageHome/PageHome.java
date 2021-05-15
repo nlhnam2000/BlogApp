@@ -236,18 +236,27 @@ public class PageHome extends JFrame implements ActionListener {
 			JPanel buttonPanel = new JPanel(); 
 			buttonPanel.setLayout(new FlowLayout(FlowLayout.LEFT));
 			buttonPanel.setBackground(panel.getBackground());
+			
 			blog.getComments();
+			int isLiked = blog.isLiked(user.getUsername()); 
 			JButton likeButton = new JButton(); 
 			if (blog.isLiked(user.getUsername()) == 0) {
-				if (blog.getLikes() > 0) {
-					likeButton.setText("Like (" + blog.likes + ")");
-				}
-				else if (blog.getLikes() == 0) {
-					likeButton.setText("Like");
-				}
+//				if (blog.getLikes() > 0) {
+//					likeButton.setText("Like (" + blog.likes + ")");
+//					likeButton.setForeground(Color.black);
+//				}
+//				else if (blog.getLikes() == 0) {
+//					// likeButton.setText("Like");
+//					likeButton.setForeground(Color.black);
+//				}
+				likeButton.setText("Like (" + blog.getLikes() + ")");
+				likeButton.setForeground(Color.black);
 			}
 			else {
-				likeButton.setText("Unlike");
+				// likeButton.setText("Like");
+				// likeButton.setBorderPainted(false);
+				likeButton.setText("Like (" + blog.getLikes() + ")");
+				likeButton.setForeground(Color.blue);
 			}
 			
 			JButton commentButton = new JButton("Comment (" + blog.cmt.size() + ")"); 
@@ -264,23 +273,41 @@ public class PageHome extends JFrame implements ActionListener {
 			// add action listener
 			likeButton.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent ae) {
-					String state = ae.getActionCommand(); 
-					if (state.contains("Like")) { // liked
-						// System.out.println("Liked"); 
-						String date = String.valueOf(LocalDate.now()); 
-						int userIdBlog = blog.getUserIDWithUsername(blog.get_Username()); 
-						Interaction notice = new Interaction(userIdBlog, blog.get_Username(), user.getUserID(), user.getUsername(), blog.get_BlogID(), date, "");
-						user.LikeBlog(blog.get_BlogID(), blog.get_Username(), notice);
-						likeButton.setText("Unlike"); 
+//					String state = ae.getActionCommand(); 
+//					if (state.contains("Like")) { // liked
+//						// System.out.println("Liked"); 
+//						String date = String.valueOf(LocalDate.now()); 
+//						int userIdBlog = blog.getUserIDWithUsername(blog.get_Username()); 
+//						Interaction notice = new Interaction(userIdBlog, blog.get_Username(), user.getUserID(), user.getUsername(), blog.get_BlogID(), date, "");
+//						user.LikeBlog(blog.get_BlogID(), blog.get_Username(), notice);
+//						likeButton.setText("Unlike"); 
+//						likeButton.setForeground(Color.blue);
+//					}
+//					else {
+//						// System.out.println("Unliked"); 
+//						String date = String.valueOf(LocalDate.now()); 
+//						int userIdBlog = blog.getUserIDWithUsername(blog.get_Username()); 
+//						Interaction notice = new Interaction(userIdBlog, blog.get_Username(), user.getUserID(), user.getUsername(), blog.get_BlogID(), date, "");
+//						user.LikeBlog(blog.get_BlogID(), blog.get_Username(), notice);
+//						likeButton.setText("Like");
+//						likeButton.setForeground(Color.black);
+//					}
+					
+					String date = String.valueOf(LocalDate.now()); 
+					int userIdBlog = blog.getUserIDWithUsername(blog.get_Username()); 
+					Interaction notice = new Interaction(userIdBlog, blog.get_Username(), user.getUserID(), user.getUsername(), blog.get_BlogID(), date, "");
+					user.LikeBlog(blog.get_BlogID(), blog.get_Username(), notice);
+					if (blog.isLiked == 0) { // like button
+						blog.likes += 1; 
+						likeButton.setForeground(Color.blue);
+						likeButton.setText("Like (" + blog.likes + ")");
 					}
-					else {
-						// System.out.println("Unliked"); 
-						String date = String.valueOf(LocalDate.now()); 
-						int userIdBlog = blog.getUserIDWithUsername(blog.get_Username()); 
-						Interaction notice = new Interaction(userIdBlog, blog.get_Username(), user.getUserID(), user.getUsername(), blog.get_BlogID(), date, "");
-						user.LikeBlog(blog.get_BlogID(), blog.get_Username(), notice);
-						likeButton.setText("Like");
+					else { // unlike button
+						blog.likes -= 1;
+						likeButton.setForeground(Color.black);
+						likeButton.setText("Like (" + blog.likes + ")");
 					}
+					blog.isLiked = Math.abs(blog.isLiked - 1); 
 				}
 			});
 			

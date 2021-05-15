@@ -175,7 +175,7 @@ public class Blogs{
             Connection conn = DriverManager.getConnection(dbURL, user, pass);
             Statement stmt = conn.createStatement();
             
-            String sql = "SELECT count(BlogID) AS Likes FROM LikeBlog WHERE BlogID = " + this.BlogID; 
+            String sql = "SELECT count(*) AS Likes FROM LikeBlog WHERE BlogID = " + this.BlogID + "AND StatusLike = 1"; 
             ResultSet rs = stmt.executeQuery(sql); 
             
             while (rs.next()) {
