@@ -2,6 +2,7 @@ package Blog;
 
 import java.sql.Connection;
 
+
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -12,6 +13,7 @@ import Interactive.Interactives;
 import Interactive.LikeBlog;
 import Status.BlogStatus;
 import User.Users;
+import ConnectDB.Connect_SQL;
 
 public class Blogs{
 
@@ -147,8 +149,9 @@ public class Blogs{
     public void getComments() {
     	try {
     		
-    		Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver"); 
-            Connection conn = DriverManager.getConnection(dbURL, user, pass);
+//    		Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver"); 
+//            Connection conn = DriverManager.getConnection(dbURL, user, pass);
+    		Connection conn = Connect_SQL.getConnection(); 
             Statement stmt = conn.createStatement();
             
             String sql = "Select * from Comment Where BlogID = " + this.BlogID; 
@@ -161,9 +164,6 @@ public class Blogs{
             }
             rs.close();
     		
-    	} catch (ClassNotFoundException e) {
-    		System.out.println("Error: unable to load driver class.");
-    		System.exit(1);
     	} catch (SQLException e) {
     		e.printStackTrace();
     	}
@@ -219,8 +219,9 @@ public class Blogs{
     public int getUserIDWithUsername(String username) {
     	int UserID = 0; 
     	try {
-    		Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver"); 
-            Connection conn = DriverManager.getConnection(dbURL, user, pass);
+//    		Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver"); 
+//            Connection conn = DriverManager.getConnection(dbURL, user, pass);
+    		Connection conn = Connect_SQL.getConnection(); 
             Statement stmt = conn.createStatement();
             
             String sql = "SELECT UserID from User_Social WHERE Username = '" + username + "'"; 
@@ -231,9 +232,6 @@ public class Blogs{
             }
             rs.close();
             
-    	} catch (ClassNotFoundException e) {
-    		System.out.println("Error: unable to load driver class.");
-    		System.exit(1);
     	} catch (SQLException e) {
     		e.printStackTrace();
     	}

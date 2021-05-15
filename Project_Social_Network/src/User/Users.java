@@ -1,6 +1,7 @@
 package User;
 
 import java.sql.Connection;
+
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -16,6 +17,7 @@ import Notification.Interaction;
 import Query.QuerySQL;
 import HashPw.BCrypt;
 import Status.*;
+import ConnectDB.Connect_SQL;
 
 public class Users{
 
@@ -161,12 +163,14 @@ public class Users{
 
     public boolean Login(String username, String password){
     	try {
-			Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
-    		String DB_URL = "jdbc:sqlserver://localhost:62673;databaseName=Social_Network;integratedSecurity=true;";
-    		Connection conn = DriverManager.getConnection(DB_URL);
+//			Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
+//    		String DB_URL = "jdbc:sqlserver://localhost:62673;databaseName=Social_Network;integratedSecurity=true;";
+//    		Connection conn = DriverManager.getConnection(DB_URL);
  		
 //    		Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver"); 
 //            Connection conn = DriverManager.getConnection(dbURL, user, pass);
+    		
+    		Connection conn = Connect_SQL.getConnection(); 
     		
     		Statement stmt = conn.createStatement();
     		String getAllUser = "Select * From User_Social";
@@ -187,10 +191,6 @@ public class Users{
 			r.close();
     		
     		
-		}catch(ClassNotFoundException ex)
-		{
-			System.out.println("Error: unable to load driver class.");
-    		System.exit(1);
 		} catch (SQLException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
@@ -219,8 +219,10 @@ public class Users{
 //    		String DB_URL = "jdbc:sqlserver://localhost:1433;databaseName=Social_Network;integratedSecurity=true;";
 //    		Connection conn = DriverManager.getConnection(DB_URL);
     		
-    		Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver"); 
-            Connection conn = DriverManager.getConnection(dbURL, user, pass);
+//    		Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver"); 
+//            Connection conn = DriverManager.getConnection(dbURL, user, pass);
+    		
+    		Connection conn = Connect_SQL.getConnection(); 
     		
     		Statement stmt = conn.createStatement();
     	
@@ -232,10 +234,6 @@ public class Users{
  
     		
     		
-		}catch(ClassNotFoundException ex)
-		{
-			System.out.println("Error: unable to load driver class.");
-    		System.exit(1);
 		} catch (SQLException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
@@ -264,12 +262,14 @@ public class Users{
     public void getAllBlog() {
     	this.blog.clear();
     	try {
-			Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
-    		String DB_URL = "jdbc:sqlserver://localhost:62673;databaseName=Social_Network;integratedSecurity=true;";    		
-    		Connection conn = DriverManager.getConnection(DB_URL);
+//			Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
+//    		String DB_URL = "jdbc:sqlserver://localhost:62673;databaseName=Social_Network;integratedSecurity=true;";    		
+//    		Connection conn = DriverManager.getConnection(DB_URL);
     		
 //    		Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver"); 
 //            Connection conn = DriverManager.getConnection(dbURL, user, pass);
+    		
+    		Connection conn = Connect_SQL.getConnection(); 
 //    		
     		String sql = "SELECT * FROM Blog WHERE DeleteBlog = 0"; 
     		PreparedStatement ps = conn.prepareStatement(sql); 
@@ -298,10 +298,6 @@ public class Users{
 			// sort by date
 			sortBlogByDate(this.blog); 
 			
-		}catch(ClassNotFoundException ex)
-		{
-			System.out.println("Error: unable to load driver class.");
-    		System.exit(1);
 		} catch (SQLException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
@@ -367,8 +363,10 @@ public class Users{
 //    		String DB_URL = "jdbc:sqlserver://localhost:62673;databaseName=Social_Network;integratedSecurity=true;";
 //    		Connection conn = DriverManager.getConnection(DB_URL);
     		
-    		Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver"); 
-            Connection conn = DriverManager.getConnection(dbURL, user, pass);
+//    		Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver"); 
+//            Connection conn = DriverManager.getConnection(dbURL, user, pass);
+    		
+    		Connection conn = Connect_SQL.getConnection(); 
     		
     		Statement stmt = conn.createStatement();
     		int Hitcmt = 0;
@@ -405,10 +403,6 @@ public class Users{
     		conn.commit();
 			
     		return true;
-		}catch(ClassNotFoundException ex)
-		{
-			System.out.println("Error: unable to load driver class.");
-    		System.exit(1);
 		} catch (SQLException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
@@ -472,8 +466,9 @@ public class Users{
     
     public void Comment(Blogs blog, String body, LocalDate time) {
     	try {
-    		Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver"); 
-            Connection conn = DriverManager.getConnection(dbURL, user, pass);
+//    		Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver"); 
+//            Connection conn = DriverManager.getConnection(dbURL, user, pass);
+    		Connection conn = Connect_SQL.getConnection(); 
             Statement stmt = conn.createStatement();
             
             int deleteCmt = 0; 
@@ -487,9 +482,6 @@ public class Users{
             stmt.executeUpdate(sql);
     		conn.commit();
             
-    	} catch(ClassNotFoundException e) {
-    		System.out.println("Error: unable to load driver class.");
-    		System.exit(1);
     	} catch(SQLException e) {
     		// System.out.println("SQL error"); 
     		e.printStackTrace();
@@ -510,8 +502,10 @@ public class Users{
 //    		String DB_URL = "jdbc:sqlserver://localhost:62673;databaseName=Social_Network;integratedSecurity=true;";
 //    		Connection conn = DriverManager.getConnection(DB_URL);
     		
-    		Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver"); 
-            Connection conn = DriverManager.getConnection(dbURL, user, pass);    		
+//    		Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver"); 
+//            Connection conn = DriverManager.getConnection(dbURL, user, pass);    		
+    		
+    		Connection conn = Connect_SQL.getConnection(); 
     		Statement stmt = conn.createStatement();
     		
     		String select = "Select * From LikeBlog";
@@ -520,7 +514,7 @@ public class Users{
     		boolean stt = false;
     		while(r.next()) {
 				
-				if(r.getInt("UsernameID") == this.UserID) {
+				if(r.getInt("UsernameID") == this.UserID && r.getInt("BlogID") == blogID) {
 					check = true;
 					stt = r.getBoolean("StatusLike");
 					break;
@@ -565,10 +559,6 @@ public class Users{
     		
     		conn.commit();
     
-		}catch(ClassNotFoundException ex)
-		{
-			System.out.println("Error: unable to load driver class.");
-    		System.exit(1);
 		} catch (SQLException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
