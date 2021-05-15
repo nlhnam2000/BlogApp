@@ -1,5 +1,6 @@
 package Query;
 import java.sql.Connection;
+
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -9,6 +10,7 @@ import java.util.ArrayList;
 import Blog.*;
 import Interactive.*;
 import Status.BlogStatus;
+import ConnectDB.Connect_SQL;
 
 public class QuerySQL{
     ArrayList<Blogs> blog = new ArrayList<Blogs>();
@@ -20,9 +22,10 @@ public class QuerySQL{
     public void getAllBlog() {
     	this.blog.clear();
     	try {
-			Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
-    		String DB_URL = "jdbc:sqlserver://localhost:62673;databaseName=Social_Network;integratedSecurity=true;";
-    		Connection conn = DriverManager.getConnection(DB_URL);
+//			Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
+//    		String DB_URL = "jdbc:sqlserver://localhost:62673;databaseName=Social_Network;integratedSecurity=true;";
+//    		Connection conn = DriverManager.getConnection(DB_URL);
+    		Connection conn = Connect_SQL.getConnection(); 
     		Statement stmt = conn.createStatement();
     		String getAllUser = "Select * From Blog";
     		ResultSet r = stmt.executeQuery(getAllUser);
@@ -32,16 +35,12 @@ public class QuerySQL{
 					Blogs b = new Blogs(r.getString("Title"),r.getInt("BlogID"), r.getString("Username"),
 							r.getString("Body"), r.getBoolean("CommentEnabled"),r.getBoolean("DeleteBlog"),
 							r.getString("Date_of_blog"),r.getBoolean("Edit"), stt);
-					b.getAllCmnt();
+					// b.getAllCmnt();
 					this.blog.add(b);
 			}
 			r.close();
     		
     		
-		}catch(ClassNotFoundException ex)
-		{
-			System.out.println("Error: unable to load driver class.");
-    		System.exit(1);
 		} catch (SQLException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();

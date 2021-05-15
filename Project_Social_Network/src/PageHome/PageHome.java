@@ -23,6 +23,7 @@ import Blog.BlogFrame;
 import Status.BlogStatus;
 import Notification.Interaction;
 import Notification.NotificationManagement;
+import Query.QuerySQL;
 
 import java.util.*;
 
@@ -91,6 +92,22 @@ public class PageHome extends JFrame implements ActionListener {
 		searchBar.setBounds(200, 12, 350, 30); 
 		searchBar.setBackground(new Color(238,238,238));
 		searchBar.setForeground(Color.GRAY);
+		searchBar.addActionListener(new AbstractAction() {
+			public void actionPerformed(ActionEvent e) {
+				System.out.println("Text field is pressed: " + searchBar.getText().toLowerCase()); 
+				String text = searchBar.getText().toLowerCase(); 
+				QuerySQL query = new QuerySQL(); 
+				query.getAllBlog();
+				ArrayList<Blogs> blogs = query.getBlog(); 
+				for (Blogs blog: blogs) {
+					if (blog.get_Title().toLowerCase().equals(text)) {
+						BlogFrame blogFrame = new BlogFrame(blog, user); 
+						blogFrame.setVisible(true);
+					}
+				}
+				searchBar.setText("");
+			}
+		});
 		
 		postBlogBtn = new JButton("Create blog"); 
 		postBlogBtn.setBounds(600, 13, 150, 30); 
@@ -363,7 +380,7 @@ public class PageHome extends JFrame implements ActionListener {
 			// add mouse listener for this whole panel
 			panel.addMouseListener(new MouseAdapter() {
 				public void mouseClicked(MouseEvent e) {
-					BlogFrame blogFrame = new BlogFrame(blog); 
+					BlogFrame blogFrame = new BlogFrame(blog, user); 
 					blogFrame.setVisible(true);
 				}
 			});

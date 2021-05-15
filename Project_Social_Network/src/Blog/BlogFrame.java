@@ -10,6 +10,11 @@ import User.*;
 import java.awt.EventQueue;
 import java.awt.FlowLayout;
 import java.awt.Font;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
+import java.time.LocalDate;
 import java.util.ArrayList;
 
 import javax.swing.border.EmptyBorder;
@@ -17,6 +22,8 @@ import javax.swing.*;
 
 import Status.BlogStatus;
 import Interactive.Interactives;
+import Notification.Interaction;
+import PageHome.PageHome;
 
 public class BlogFrame extends JFrame {
 
@@ -28,8 +35,8 @@ public class BlogFrame extends JFrame {
 	JLabel usernameBlog; 
 	JLabel datePosted; 
 	JLabel bodyBlog; 
-	JButton likeButton = new JButton("Like"); 
-	JButton commentButton = new JButton("Comment"); 
+	JButton likeButton = new JButton(); 
+	JButton commentButton = new JButton(); 
 	
 	
 	static Users user; 
@@ -37,8 +44,9 @@ public class BlogFrame extends JFrame {
 	// int UserID = 0;
 	
 	
-	public BlogFrame(Blogs b) {
+	public BlogFrame(Blogs b, Users u) {
 		blog = b; 
+		user = u; 
 		// setSize(600, 120); 
 		// setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(500, 300, 600, 400);
@@ -83,6 +91,83 @@ public class BlogFrame extends JFrame {
 		JPanel buttonPanel = new JPanel(); 
 		buttonPanel.setLayout(new FlowLayout(FlowLayout.LEFT));
 		buttonPanel.setBackground(Color.white);
+		
+		blog.getComments();
+		int isLiked = blog.isLiked(user.getUsername()); 
+		JButton likeButton = new JButton(); 
+		if (blog.isLiked(user.getUsername()) == 0) {
+			likeButton.setText("Like (" + blog.getLikes() + ")");
+			likeButton.setForeground(Color.black);
+		}
+		else {
+			likeButton.setText("Like (" + blog.getLikes() + ")");
+			likeButton.setForeground(Color.blue);
+		}
+		
+		JButton commentButton = new JButton("Comment (" + blog.cmt.size() + ")"); 
+		
+		likeButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent ae) {
+				
+				String date = String.valueOf(LocalDate.now()); 
+				int userIdBlog = blog.getUserIDWithUsername(blog.get_Username()); 
+				Interaction notice = new Interaction(userIdBlog, blog.get_Username(), user.getUserID(), user.getUsername(), blog.get_BlogID(), date, "");
+				user.LikeBlog(blog.get_BlogID(), blog.get_Username(), notice);
+				if (blog.isLiked == 0) { // like button
+					blog.likes += 1; 
+					likeButton.setForeground(Color.blue);
+					likeButton.setText("Like (" + blog.likes + ")");
+				}
+				else { // unlike button
+					blog.likes -= 1;
+					likeButton.setForeground(Color.black);
+					likeButton.setText("Like (" + blog.likes + ")");
+				}
+				blog.isLiked = Math.abs(blog.isLiked - 1); 
+			}
+		});
+		
+		commentButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent ae) {
+				JDialog dialog = new JDialog(new PageHome(user), "Comment"); 
+				// dialog.setSize(400,200);
+				dialog.setBounds(600, 300, 600, 200);
+				dialog.setLayout(new FlowLayout());
+				JPanel panel = new JPanel(); 
+				panel.setLayout(new BoxLayout(panel, BoxLayout.X_AXIS));
+				JTextArea commentText = new JTextArea(3, 20); 
+				commentText.addKeyListener(new KeyAdapter() {
+					public void keyTyped(KeyEvent e) {
+						JTextArea textArea = (JTextArea) e.getSource(); 
+						String text = textArea.getText(); 
+						if (text.length() % 30 == 0 && text.length() != 0) {
+							text += "\n"; 
+						}
+						
+						textArea.setText(text);
+					}
+				});
+				
+				panel.add(new JLabel("Your comment: ")); 
+				panel.add(commentText); 
+				
+				JPanel buttonPanel = new JPanel(); 
+				buttonPanel.setLayout(new FlowLayout(FlowLayout.CENTER));
+				JButton addCommentButton = new JButton("OK"); 
+				addCommentButton.addActionListener(new ActionListener() {
+					public void actionPerformed(ActionEvent e) {
+						System.out.println(commentText.getText());
+						user.Comment(blog, commentText.getText(), LocalDate.now());
+					}
+				});
+				buttonPanel.add(addCommentButton); 
+				
+				dialog.add(panel); 
+				dialog.add(buttonPanel); 
+				dialog.setVisible(true);
+			}
+		});
+		
 		buttonPanel.add(likeButton);
 		buttonPanel.add(commentButton); 
 		

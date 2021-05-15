@@ -151,6 +151,7 @@ public class Blogs{
     		
 //    		Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver"); 
 //            Connection conn = DriverManager.getConnection(dbURL, user, pass);
+    		this.cmt.clear();
     		Connection conn = Connect_SQL.getConnection(); 
             Statement stmt = conn.createStatement();
             
