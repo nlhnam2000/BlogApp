@@ -2,12 +2,12 @@ package PageHome;
 
 import java.time.*;
 
-
-
 import java.awt.*;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
@@ -21,6 +21,7 @@ import Blog.Blogs;
 import Blog.postBlogFrame;
 import Blog.BlogFrame;
 import Status.BlogStatus;
+import Notification.Interaction;
 import Notification.NotificationManagement;
 
 import java.util.*;
@@ -154,16 +155,6 @@ public class PageHome extends JFrame implements ActionListener {
 			sidebarPanel.add(Box.createRigidArea(new Dimension(0,10)));
 		}
 		
-//		for (int i = 0; i < 100; i++) {
-//			JLabel label = new JLabel("Hello"); 
-//			JPanel panel = new JPanel(); 
-//			panel.setLayout(new FlowLayout(FlowLayout.LEFT));
-//			panel.setBorder(BorderFactory.createLineBorder(Color.black));
-//			panel.add(label); 
-//			sidebarPanel.add(Box.createRigidArea(new Dimension(0,10))); 
-//			sidebarPanel.add(panel);
-//		}
-		
 		gbc.gridx = 1; 
 		gbc.gridy = 0; 
 		container.add(sidebarScroll, gbc); 
@@ -245,8 +236,22 @@ public class PageHome extends JFrame implements ActionListener {
 			JPanel buttonPanel = new JPanel(); 
 			buttonPanel.setLayout(new FlowLayout(FlowLayout.LEFT));
 			buttonPanel.setBackground(panel.getBackground());
-			JButton likeButton = new JButton("Like"); 
-			JButton commentButton = new JButton("Comment"); 
+			blog.getComments();
+			JButton likeButton = new JButton(); 
+			if (blog.isLiked(user.getUsername()) == 0) {
+				if (blog.getLikes() > 0) {
+					likeButton.setText("Like (" + blog.likes + ")");
+				}
+				else if (blog.getLikes() == 0) {
+					likeButton.setText("Like");
+				}
+			}
+			else {
+				likeButton.setText("Unlike");
+			}
+			
+			JButton commentButton = new JButton("Comment (" + blog.cmt.size() + ")"); 
+			
 			
 			buttonPanel.add(likeButton); 
 			buttonPanel.add(commentButton); 
@@ -255,6 +260,71 @@ public class PageHome extends JFrame implements ActionListener {
 				JButton editButton = new JButton("Setting"); 
 				buttonPanel.add(editButton);
 			}
+			
+			// add action listener
+			likeButton.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent ae) {
+					String state = ae.getActionCommand(); 
+					if (state.contains("Like")) { // liked
+						// System.out.println("Liked"); 
+						String date = String.valueOf(LocalDate.now()); 
+						int userIdBlog = blog.getUserIDWithUsername(blog.get_Username()); 
+						Interaction notice = new Interaction(userIdBlog, blog.get_Username(), user.getUserID(), user.getUsername(), blog.get_BlogID(), date, "");
+						user.LikeBlog(blog.get_BlogID(), blog.get_Username(), notice);
+						likeButton.setText("Unlike"); 
+					}
+					else {
+						// System.out.println("Unliked"); 
+						String date = String.valueOf(LocalDate.now()); 
+						int userIdBlog = blog.getUserIDWithUsername(blog.get_Username()); 
+						Interaction notice = new Interaction(userIdBlog, blog.get_Username(), user.getUserID(), user.getUsername(), blog.get_BlogID(), date, "");
+						user.LikeBlog(blog.get_BlogID(), blog.get_Username(), notice);
+						likeButton.setText("Like");
+					}
+				}
+			});
+			
+			commentButton.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent ae) {
+					JDialog dialog = new JDialog(PageHome.this, "Comment"); 
+					// dialog.setSize(400,200);
+					dialog.setBounds(600, 300, 600, 200);
+					dialog.setLayout(new FlowLayout());
+					JPanel panel = new JPanel(); 
+					panel.setLayout(new BoxLayout(panel, BoxLayout.X_AXIS));
+					JTextArea commentText = new JTextArea(3, 20); 
+					commentText.addKeyListener(new KeyAdapter() {
+						public void keyTyped(KeyEvent e) {
+							JTextArea textArea = (JTextArea) e.getSource(); 
+							String text = textArea.getText(); 
+							if (text.length() % 30 == 0 && text.length() != 0) {
+								text += "\n"; 
+							}
+							
+							textArea.setText(text);
+						}
+					});
+					
+					panel.add(new JLabel("Your comment: ")); 
+					panel.add(commentText); 
+					
+					JPanel buttonPanel = new JPanel(); 
+					buttonPanel.setLayout(new FlowLayout(FlowLayout.CENTER));
+					JButton addCommentButton = new JButton("OK"); 
+					addCommentButton.addActionListener(new ActionListener() {
+						public void actionPerformed(ActionEvent e) {
+							System.out.println(commentText.getText());
+							user.Comment(blog, commentText.getText(), LocalDate.now());
+						}
+					});
+					buttonPanel.add(addCommentButton); 
+					
+					dialog.add(panel); 
+					dialog.add(buttonPanel); 
+					dialog.setVisible(true);
+				}
+			});
+			
 			
 			panel.add(subPanel); 
 			panel.add(bodyPanel); 
@@ -271,6 +341,8 @@ public class PageHome extends JFrame implements ActionListener {
 				}
 			});
 		}
+		
+		// add action listener
 		
 		
 		return blogPanel; 

@@ -1,25 +1,28 @@
 package Blog;
 
 import java.awt.BorderLayout;
+
 import java.awt.Color;
+import java.awt.Dimension;
 
 import User.*;
 
 import java.awt.EventQueue;
 import java.awt.FlowLayout;
 import java.awt.Font;
+import java.util.ArrayList;
 
 import javax.swing.border.EmptyBorder;
 import javax.swing.*;
 
 import Status.BlogStatus;
+import Interactive.Interactives;
 
 public class BlogFrame extends JFrame {
 
 	/**
 	 * 
 	 */
-	static final long serialVersionUID = 1L;
 	JPanel contentPane = new JPanel();
 	JLabel titleBlog; 
 	JLabel usernameBlog; 
@@ -29,42 +32,16 @@ public class BlogFrame extends JFrame {
 	JButton commentButton = new JButton("Comment"); 
 	
 	
-	
 	static Users user; 
 	static Blogs blog; 
 	// int UserID = 0;
 	
 	
-//	public BlogFrame(Users u, int userid) {
-//		this.user = new Users(u);
-//		this.UserID = userid;
-//		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-//		setBounds(100, 100, 645, 510);
-//		contentPane = new JPanel();
-//		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
-//		setContentPane(contentPane);
-//		contentPane.setLayout(null);
-//		
-//		JTextArea txtrHello = new JTextArea();
-//		txtrHello.setBounds(197, 172, 265, 226);
-//		contentPane.add(txtrHello);
-//		txtrHello.setText(BlogFrame.this.user.getUsername() + " " + BlogFrame.this.UserID);
-//		BlogFrame.this.user.EditBlog(7, "Troi xanh" , "Hom nay la mot ngay dep troi");
-//		BlogFrame.this.user.EditCmt(3, "Cmt de len fan cung :v");
-//		
-////		Blogs b = new Blogs("Nau an", this.user.getUsername(),"Hom nay minh da nau duoc mot vai mon ngon", true,  true,
-////				"2021-03-31", true, new BlogStatus());
-////		
-////		System.out.print(this.user.getUsername() + " " + this.user.getUserID());
-////		this.user.PostBlog(b);
-//		
-//	}
-	
 	public BlogFrame(Blogs b) {
 		blog = b; 
-		setSize(600, 800); 
+		// setSize(600, 120); 
 		// setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(300, 100, 600, 250);
+		setBounds(500, 300, 600, 400);
 		contentPane.setLayout(new BoxLayout(contentPane, BoxLayout.PAGE_AXIS));
 		contentPane.setBackground(Color.white);
 		contentPane.setBorder(BorderFactory.createLineBorder(Color.black));
@@ -113,10 +90,69 @@ public class BlogFrame extends JFrame {
 		contentPane.add(bodyPanel); 
 		contentPane.add(buttonPanel); 
 		
+		// show comment here
+		blog.getComments();
+		ArrayList<JPanel> cmtPanel = showComment(blog.cmt); 
+		for (JPanel panel : cmtPanel) {
+			contentPane.add(panel); 
+			contentPane.add(Box.createRigidArea(new Dimension(0,10))); 
+		}
 		
-		add(contentPane);
+		JScrollPane scrollPane = new JScrollPane(contentPane); 
+		
+		
+		
+		add(scrollPane);
 		
 		//setUndecorated(true);
+	}
+	
+	public ArrayList<JPanel> showComment(ArrayList<Interactives> cmtList) {
+		ArrayList<JPanel> cmtPanel = new ArrayList<>(); 
+		for (Interactives cmt : cmtList) {
+			JPanel panel = new JPanel(); 
+			panel.setLayout(new BoxLayout(panel, BoxLayout.PAGE_AXIS));
+			panel.setBackground(Color.white);
+			panel.setBorder(BorderFactory.createLineBorder(Color.black));
+			
+			JPanel subPanel = new JPanel(); 
+			subPanel.setLayout(new FlowLayout(FlowLayout.LEFT));
+			subPanel.setBackground(Color.white);
+			JLabel userCmt = new JLabel(cmt.get_Username()); 
+			userCmt.setFont(new Font("Tahoma", Font.BOLD, 15));
+			JLabel datePosted = new JLabel(" at " + cmt.get_Date()); 
+			datePosted.setForeground(Color.gray);
+			subPanel.add(userCmt); 
+			subPanel.add(datePosted); 
+			
+			JPanel bodyPanel = new JPanel();
+			bodyPanel.setLayout(new FlowLayout(FlowLayout.LEFT));
+			bodyPanel.setBackground(Color.white);
+			
+			if (cmt.get_Body().length() >= 70) {
+				String text = "<html>"; 
+				for (int i = 0; i < cmt.get_Body().length(); i++) {
+					text += cmt.get_Body().charAt(i); 
+					if (text.length() % 70 == 0) {
+						text += "<br>"; 
+					}
+				}
+				text += "</html>"; 
+				JLabel bodyPost = new JLabel(text); 
+				bodyPanel.add(bodyPost); 
+			}
+			else {
+				JLabel bodyPost = new JLabel(cmt.get_Body()); 
+				bodyPanel.add(bodyPost); 
+			}
+			
+			panel.add(subPanel); 
+			panel.add(bodyPanel); 
+			
+			cmtPanel.add(panel); 
+		}
+		
+		return cmtPanel; 
 	}
 	
 	/**
@@ -136,8 +172,5 @@ public class BlogFrame extends JFrame {
 //		});
 //	}
 
-	/**
-	 * Create the frame.
-	 */
 	
 }

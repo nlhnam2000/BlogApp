@@ -1,6 +1,7 @@
 package Blog;
 
 import java.sql.Connection;
+
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -8,20 +9,30 @@ import java.sql.Statement;
 import java.util.ArrayList;
 
 import Interactive.Interactives;
+import Interactive.LikeBlog;
 import Status.BlogStatus;
+import User.Users;
 
 public class Blogs{
 
     protected String Title;
     protected int BlogID;
     protected String Username;
+    // protected int UserID; 
     protected String Body;
     protected boolean CommentEnabled;
     protected boolean DeleteBlog;
     protected String Date;
     protected boolean Edit;
     protected BlogStatus status;
-    ArrayList<Interactives> cmt = new ArrayList<Interactives>();
+    public ArrayList<Interactives> cmt = new ArrayList<Interactives>();
+    // public ArrayList<LikeBlog> like = new ArrayList<>(); 
+    public int likes; 
+    public int isLiked; 
+    
+    String dbURL = "jdbc:sqlserver://localhost:1433;DatabaseName=Social_Network";
+    String user = "sa";
+    String pass = "Password123@jkl#";
 
     public Blogs(){}
 
@@ -132,8 +143,105 @@ public class Blogs{
     public void set_Edit(boolean edit){
         this.Edit = edit;
     }
+    
+    public void getComments() {
+    	try {
+    		
+    		Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver"); 
+            Connection conn = DriverManager.getConnection(dbURL, user, pass);
+            Statement stmt = conn.createStatement();
+            
+            String sql = "Select * from Comment Where BlogID = " + this.BlogID; 
+            ResultSet rs = stmt.executeQuery(sql);
+            
+            while (rs.next()) {
+            	Interactives comment = new Interactives(rs.getString("Username"), rs.getInt("BlogID"), rs.getString("Body"), 
+            			rs.getBoolean("DeleteCmt"), rs.getBoolean("Edit"), rs.getString("Date_of_Comment"), rs.getString("UsernameIDBlog"));
+            	this.cmt.add(comment); 
+            }
+            rs.close();
+    		
+    	} catch (ClassNotFoundException e) {
+    		System.out.println("Error: unable to load driver class.");
+    		System.exit(1);
+    	} catch (SQLException e) {
+    		e.printStackTrace();
+    	}
+    }
+    
+    public int getLikes() {
+    	try {
+    		Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver"); 
+            Connection conn = DriverManager.getConnection(dbURL, user, pass);
+            Statement stmt = conn.createStatement();
+            
+            String sql = "SELECT count(BlogID) AS Likes FROM LikeBlog WHERE BlogID = " + this.BlogID; 
+            ResultSet rs = stmt.executeQuery(sql); 
+            
+            while (rs.next()) {
+            	this.likes = rs.getInt("Likes"); 
+            }
+    		
+    	} catch (ClassNotFoundException e) {
+    		System.out.println("Error: unable to load driver class.");
+    		System.exit(1);
+    	} catch (SQLException e) {
+    		e.printStackTrace();
+    	}
+    	
+    	return this.likes; 
+    }
+    
+    public int isLiked(String username) {
+    	try {
+    		Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver"); 
+            Connection conn = DriverManager.getConnection(dbURL, user, pass);
+            Statement stmt = conn.createStatement();
+            
+            String sql = "SELECT StatusLike FROM LikeBlog WHERE BlogID = " + this.BlogID + " AND Username = '" + username + "'";  
+            ResultSet rs = stmt.executeQuery(sql); 
+            
+            while (rs.next()) {
+            	this.isLiked = rs.getInt("StatusLike");  
+            }
+            rs.close();
+    		
+    	} catch (ClassNotFoundException e) {
+    		System.out.println("Error: unable to load driver class.");
+    		System.exit(1);
+    	} catch (SQLException e) {
+    		e.printStackTrace();
+    	}
+    	
+    	return this.isLiked; 
+    }
+    
+    public int getUserIDWithUsername(String username) {
+    	int UserID = 0; 
+    	try {
+    		Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver"); 
+            Connection conn = DriverManager.getConnection(dbURL, user, pass);
+            Statement stmt = conn.createStatement();
+            
+            String sql = "SELECT UserID from User_Social WHERE Username = '" + username + "'"; 
+            ResultSet rs = stmt.executeQuery(sql); 
+            
+            while (rs.next()) {
+            	UserID = rs.getInt("UserID"); 
+            }
+            rs.close();
+            
+    	} catch (ClassNotFoundException e) {
+    		System.out.println("Error: unable to load driver class.");
+    		System.exit(1);
+    	} catch (SQLException e) {
+    		e.printStackTrace();
+    	}
+    	
+    	return UserID; 
+    }
 
-    public void getAllCmnt() {
+    public void getAllCmnt() { // dont need, a blog just contains its own comments
     	this.cmt.clear();
     	try {
 			Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");

@@ -1,7 +1,6 @@
 package User;
 
 import java.sql.Connection;
-
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -470,6 +469,32 @@ public class Users{
 		}
     	return false;
     }
+    
+    public void Comment(Blogs blog, String body, LocalDate time) {
+    	try {
+    		Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver"); 
+            Connection conn = DriverManager.getConnection(dbURL, user, pass);
+            Statement stmt = conn.createStatement();
+            
+            int deleteCmt = 0; 
+            int editCmt = 0; 
+            
+            String sql = "Insert into Comment Values(" + this.UserID + ", '" + this.Username + "', '" + blog.get_Username() + 
+            		"', " + blog.get_BlogID() + ", '" + body + "', " + deleteCmt + ", " + editCmt + ", '" + String.valueOf(time) + 
+            		"', '" + blog.get_Title() + "')"; 
+            
+            
+            stmt.executeUpdate(sql);
+    		conn.commit();
+            
+    	} catch(ClassNotFoundException e) {
+    		System.out.println("Error: unable to load driver class.");
+    		System.exit(1);
+    	} catch(SQLException e) {
+    		// System.out.println("SQL error"); 
+    		e.printStackTrace();
+    	}
+    }
 
     public void EditComment(){
 
@@ -481,10 +506,14 @@ public class Users{
 
     public void LikeBlog(int blogID, String usernameBlog, Interaction notice){
     	try {
-			Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
-    		String DB_URL = "jdbc:sqlserver://localhost:62673;databaseName=Social_Network;integratedSecurity=true;";
-    		Connection conn = DriverManager.getConnection(DB_URL);
+//			Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
+//    		String DB_URL = "jdbc:sqlserver://localhost:62673;databaseName=Social_Network;integratedSecurity=true;";
+//    		Connection conn = DriverManager.getConnection(DB_URL);
+    		
+    		Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver"); 
+            Connection conn = DriverManager.getConnection(dbURL, user, pass);    		
     		Statement stmt = conn.createStatement();
+    		
     		String select = "Select * From LikeBlog";
     		ResultSet r = stmt.executeQuery(select);
     		boolean check = false;
