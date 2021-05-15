@@ -23,7 +23,7 @@ public class AccountQuery{
 		this.account.clear();
 		try {
 			Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
-			String DB_URL = "jdbc:sqlserver://localhost:1433;databaseName=Social_Network;integratedSecurity=true;";
+			String DB_URL = "jdbc:sqlserver://localhost:62673;databaseName=Social_Network;integratedSecurity=true;";
 			Connection conn = DriverManager.getConnection(DB_URL);
 			Statement stmt = conn.createStatement();
 			String getAllAccount = "Select * From User_Social";
@@ -45,7 +45,7 @@ public class AccountQuery{
 		this.account.clear();
 		try {
 			Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
-			String DB_URL = "jdbc:sqlserver://localhost:1433;databaseName=Social_Network;integratedSecurity=true;";
+			String DB_URL = "jdbc:sqlserver://localhost:62673;databaseName=Social_Network;integratedSecurity=true;";
 			Connection conn = DriverManager.getConnection(DB_URL);
 			Statement stmt = conn.createStatement();
 			String getAllAccount = "Select * From User_Social Where UserId = " + id;
@@ -68,7 +68,7 @@ public class AccountQuery{
 	public void findAccountByIdAndUsername(String id, String username) {
 		try {
 			Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
-			String DB_URL = "jdbc:sqlserver://localhost:1433;databaseName=Social_Network;integratedSecurity=true;";
+			String DB_URL = "jdbc:sqlserver://localhost:62673;databaseName=Social_Network;integratedSecurity=true;";
 			Connection conn = DriverManager.getConnection(DB_URL);
 			Statement stmt = conn.createStatement();
 			String queryStatement = "";
@@ -99,7 +99,7 @@ public class AccountQuery{
 	public boolean addAccount(Account accountDto) {
 		try {
 			Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
-			String DB_URL = "jdbc:sqlserver://localhost:1433;databaseName=Social_Network;integratedSecurity=true;";
+			String DB_URL = "jdbc:sqlserver://localhost:62673;databaseName=Social_Network;integratedSecurity=true;";
 			Connection conn = DriverManager.getConnection(DB_URL);
 			Statement stmt = conn.createStatement();
 			String password = accountDto.getPassword();
@@ -126,7 +126,7 @@ public class AccountQuery{
 	public boolean updateAccount(Account accountDto) {
 		try {
 			Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
-			String DB_URL = "jdbc:sqlserver://localhost:1433;databaseName=Social_Network;integratedSecurity=true;";
+			String DB_URL = "jdbc:sqlserver://localhost:62673;databaseName=Social_Network;integratedSecurity=true;";
 			Connection conn = DriverManager.getConnection(DB_URL);
 			Statement stmt = conn.createStatement();
 			String password = accountDto.getPassword();
@@ -134,7 +134,7 @@ public class AccountQuery{
 			String queryStatement = "Update User_Social "
 								+ "Set  First_Name = '" + accountDto.getFirstName() + "', "
 										+ "Last_Name = '" + accountDto.getLastName() + "', "
-										+ "Username = '" + accountDto.getUsername() + "', "
+										+ "Passwork = '" + accountDto.getPassword() + "', "
 										+ "Date_of_birth = '" + accountDto.getDateOfBirth() + "', "
 										+ "Email = '" + accountDto.getEmail() + "', "
 										+ "Adress = '" + accountDto.getAddress() + "' "
