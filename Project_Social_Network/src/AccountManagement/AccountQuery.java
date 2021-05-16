@@ -7,6 +7,8 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 
+import ConnectDB.Connect_SQL;
+
 
 
 public class AccountQuery{
@@ -34,10 +36,7 @@ public class AccountQuery{
 				this.account.add(a);
 			}
 			result.close();
-		}catch(ClassNotFoundException ex) {
-			System.out.println("Error: unable to load driver class.");
-			System.exit(1);
-		} catch (SQLException e1) {
+		}catch (SQLException e1) {
 			e1.printStackTrace();
 		}
 	}
@@ -55,10 +54,7 @@ public class AccountQuery{
 				return a;
 			}
 			result.close();
-		}catch(ClassNotFoundException ex) {
-			System.out.println("Error: unable to load driver class.");
-			System.exit(1);
-		} catch (SQLException e1) {
+		}catch (SQLException e1) {
 			e1.printStackTrace();
 		}
 		return null;
@@ -86,10 +82,7 @@ public class AccountQuery{
 				this.account.add(a);
 			}
 			result.close();
-		}catch(ClassNotFoundException ex) {
-			System.out.println("Error: unable to load driver class.");
-			System.exit(1);
-		} catch (SQLException e1) {
+		}catch (SQLException e1) {
 			System.out.println("SQL Problems");
 			e1.printStackTrace();
 		}
@@ -112,10 +105,7 @@ public class AccountQuery{
 			int rowChange = stmt.executeUpdate(queryStatement);
 			if (rowChange != 1)
 				return false;
-		}catch(ClassNotFoundException ex) {
-			System.out.println("Error: unable to load driver class.");
-			System.exit(1);
-		} catch (SQLException e1) {
+		}catch (SQLException e1) {
 			e1.printStackTrace();
 		}
 		return true;	
@@ -140,10 +130,7 @@ public class AccountQuery{
 			System.out.println(rowChange);
 			if (rowChange != 1)
 				return false;
-		}catch(ClassNotFoundException ex) {
-			System.out.println("Error: unable to load driver class.");
-			System.exit(1);
-		} catch (SQLException e1) {
+		}catch (SQLException e1) {
 			e1.printStackTrace();
 		}
 		return true;
@@ -158,10 +145,7 @@ public class AccountQuery{
 			String queryStatement = "DELETE FROM User_Social WHERE UserId = " + removeId;
 			stmt = conn.prepareStatement(queryStatement);
 			rows = stmt.executeUpdate();
-		}catch(ClassNotFoundException ex) {
-			System.out.println("Error: unable to load driver class.");
-			System.exit(1);
-		} catch (SQLException e1) {
+		}catch (SQLException e1) {
 			e1.printStackTrace();
 		}
 		System.out.println("8");
@@ -178,10 +162,7 @@ public class AccountQuery{
 			String queryStatement = "DELETE FROM Interaction WHERE visitorId = " + id;
 			stmt = conn.prepareStatement(queryStatement);
 			stmt.executeUpdate();
-		}catch(ClassNotFoundException ex) {
-			System.out.println("Error: unable to load driver class.");
-			System.exit(1);
-		} catch (SQLException e1) {
+		}catch (SQLException e1) {
 			e1.printStackTrace();
 		}
 		System.out.println("1");
@@ -195,10 +176,7 @@ public class AccountQuery{
 			String queryStatement = "DELETE FROM LikeBlog WHERE UsernameID = " + removeId;
 			stmt = conn.prepareStatement(queryStatement);
 			stmt.executeUpdate();
-		}catch(ClassNotFoundException ex) {
-			System.out.println("Error: unable to load driver class.");
-			System.exit(1);
-		} catch (SQLException e1) {
+		}catch (SQLException e1) {
 			e1.printStackTrace();
 		}
 		System.out.println("2");
@@ -212,10 +190,7 @@ public class AccountQuery{
 			String queryStatement = "DELETE FROM Comment WHERE UsernameIDCmt = " + removeId;
 			stmt = conn.prepareStatement(queryStatement);
 			stmt.executeUpdate();
-		}catch(ClassNotFoundException ex) {
-			System.out.println("Error: unable to load driver class.");
-			System.exit(1);
-		} catch (SQLException e1) {
+		}catch (SQLException e1) {
 			e1.printStackTrace();
 		}
 		System.out.println("3");
@@ -232,10 +207,7 @@ public class AccountQuery{
 	        while(rs.next()){
 	        	blogList.add(rs.getString("BlogID"));
 	        }
-		}catch(ClassNotFoundException ex) {
-			System.out.println("Error: unable to load driver class.");
-			System.exit(1);
-		} catch (SQLException e1) {
+		}catch (SQLException e1) {
 			e1.printStackTrace();
 		}
 		System.out.println("4");
@@ -250,10 +222,7 @@ public class AccountQuery{
 			String queryStatement = "DELETE FROM LikeBlog WHERE BlogID = " + blogId;
 			stmt = conn.prepareStatement(queryStatement);
 			stmt.executeUpdate();
-		}catch(ClassNotFoundException ex) {
-			System.out.println("Error: unable to load driver class.");
-			System.exit(1);
-		} catch (SQLException e1) {
+		}catch (SQLException e1) {
 			e1.printStackTrace();
 		}
 		System.out.println("5");
@@ -267,10 +236,7 @@ public class AccountQuery{
 			String queryStatement = "DELETE FROM Comment WHERE BlogID = " + blogId;
 			stmt = conn.prepareStatement(queryStatement);
 			stmt.executeUpdate();
-		}catch(ClassNotFoundException ex) {
-			System.out.println("Error: unable to load driver class.");
-			System.exit(1);
-		} catch (SQLException e1) {
+		}catch (SQLException e1) {
 			e1.printStackTrace();
 		}
 		System.out.println("6");
@@ -284,10 +250,7 @@ public class AccountQuery{
 			String queryStatement = "DELETE FROM Blog WHERE UsernameID = " + removeId;
 			stmt = conn.prepareStatement(queryStatement);
 			stmt.executeUpdate();
-		}catch(ClassNotFoundException ex) {
-			System.out.println("Error: unable to load driver class.");
-			System.exit(1);
-		} catch (SQLException e1) {
+		}catch (SQLException e1) {
 			e1.printStackTrace();
 		}
 		System.out.println("7");

@@ -55,7 +55,7 @@ public class UpdateForm extends JFrame {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					UpdateForm frame = new UpdateForm(user);
+					UpdateForm frame = new UpdateForm();
 					frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -67,8 +67,8 @@ public class UpdateForm extends JFrame {
 	/**
 	 * Create the frame.
 	 */
-	public UpdateForm(Users u) {
-		user = new Users(u);
+	public UpdateForm() {
+	
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 600, 400);
 		contentPane = new JPanel();
@@ -179,14 +179,14 @@ public class UpdateForm extends JFrame {
 					if (result == false) {
 						JOptionPane.showMessageDialog(null, "Fail to update a new account.");
 						System.out.println(result);
-						AccountManagement accountManagementFrame = new AccountManagement(u);
+						AccountManagement accountManagementFrame = new AccountManagement();
 						accountManagementFrame.setVisible(true);
 						accountManagementFrame.showUser();
 						dispose();
 					}
 					else {
 						JOptionPane.showMessageDialog(null, "The account was successfully updated in database.");
-						AccountManagement accountManagementFrame = new AccountManagement(u);
+						AccountManagement accountManagementFrame = new AccountManagement();
 						accountManagementFrame.setVisible(true);
 						accountManagementFrame.showUser();
 						dispose();

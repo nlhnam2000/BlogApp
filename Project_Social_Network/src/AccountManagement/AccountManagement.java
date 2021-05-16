@@ -25,7 +25,10 @@ import javax.swing.JPasswordField;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
+import java.sql.Connection;
+import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.awt.event.ActionEvent;
 
@@ -64,7 +67,7 @@ public class AccountManagement extends JFrame {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					AccountManagement frame = new AccountManagement(user);
+					AccountManagement frame = new AccountManagement();
 					frame.setVisible(true);
 					frame.showUser();
 				} catch (Exception e) {
@@ -73,7 +76,26 @@ public class AccountManagement extends JFrame {
 			}
 		});
 	}
-
+	
+	public void remove_Status(int blogid) {
+		try {
+			Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
+			String DB_URL = "jdbc:sqlserver://localhost:62673;databaseName=Social_Network;integratedSecurity=true;";
+    		Connection conn = DriverManager.getConnection(DB_URL);					
+    		Statement stmt = conn.createStatement();
+    		String delete = "Delete from BlogStatus Where BlogID = " + blogid;
+    		stmt.executeUpdate(delete);
+    		
+		} catch (ClassNotFoundException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		} catch (SQLException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		
+	}
+	
 	/**
 	 * Create the frame.
 	 */
@@ -118,8 +140,8 @@ public class AccountManagement extends JFrame {
 		}
 		model1_admin.setColumnIdentifiers(column_admin);
 	}
-	public AccountManagement(Users u) {
-		user = new Users(u);
+	public AccountManagement() {
+		user = new Users();
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 600, 400);
 		contentPane = new JPanel();
@@ -235,7 +257,7 @@ public class AccountManagement extends JFrame {
 		JButton btnNewButton = new JButton("Add");
 		btnNewButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				AddForm addForm = new AddForm(u);
+				AddForm addForm = new AddForm();
 				addForm.setVisible(true);
 				/*
 				String id = textField1_id.getText();
@@ -259,7 +281,7 @@ public class AccountManagement extends JFrame {
 		JButton btnNewButton_1 = new JButton("Update");
 		btnNewButton_1.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				UpdateForm updateForm = new UpdateForm(u);
+				UpdateForm updateForm = new UpdateForm();
 				updateForm.setVisible(true);
 				return;
 			}
@@ -272,6 +294,8 @@ public class AccountManagement extends JFrame {
 		btnNewButton_2.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				removeId = txtBoxRemove.getText();
+		
+				remove_Status(Integer.parseInt(removeId));
 				AccountQuery accQuery = new AccountQuery();
 			
 				accQuery.removeInteractionByUserId(removeId);

@@ -8,6 +8,7 @@ import java.util.ArrayList;
 
 import AccountManagement.Account;
 import Blog.Blogs;
+import ConnectDB.Connect_SQL;
 import Status.BlogStatus;
 
 public class BlogQuery{
@@ -39,11 +40,7 @@ public class BlogQuery{
 					this.blog.add(b);
 			}
 			r.close();
-		}catch(ClassNotFoundException ex)
-		{
-			System.out.println("Error: unable to load driver class.");
-    		System.exit(1);
-		} catch (SQLException e1) {
+		}catch (SQLException e1) {
 			e1.printStackTrace();
 		}
     }
@@ -67,10 +64,7 @@ public class BlogQuery{
 			int rowChange = stmt.executeUpdate(queryStatement);
 			if (rowChange != 1)
 				return false;
-		}catch(ClassNotFoundException ex) {
-			System.out.println("Error: unable to load driver class.");
-			System.exit(1);
-		} catch (SQLException e1) {
+		}catch (SQLException e1) {
 			e1.printStackTrace();
 		}
 		return true;	
@@ -90,10 +84,7 @@ public class BlogQuery{
 			System.out.println(rowChange);
 			if (rowChange != 1)
 				return false;
-		}catch(ClassNotFoundException ex) {
-			System.out.println("Error: unable to load driver class.");
-			System.exit(1);
-		} catch (SQLException e1) {
+		}catch (SQLException e1) {
 			e1.printStackTrace();
 		}
 		return true;

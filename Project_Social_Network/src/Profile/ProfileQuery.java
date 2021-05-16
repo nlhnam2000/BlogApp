@@ -6,6 +6,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import AccountManagement.Account; // store user information
+import ConnectDB.Connect_SQL;
 
 public class ProfileQuery {
 	ArrayList<Account> account = new ArrayList<Account>();
@@ -67,10 +68,7 @@ public class ProfileQuery {
 			System.out.println(rowChange);
 			if (rowChange != 1)
 				return false;
-		}catch(ClassNotFoundException ex) {
-			System.out.println("Error: unable to load driver class.");
-			System.exit(1);
-		} catch (SQLException e1) {
+		}catch (SQLException e1) {
 			e1.printStackTrace();
 		}
 		return true;

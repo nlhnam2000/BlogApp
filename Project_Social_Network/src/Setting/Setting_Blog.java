@@ -12,6 +12,10 @@ import java.awt.Color;
 import java.awt.Rectangle;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 
 import javax.swing.border.BevelBorder;
@@ -29,6 +33,7 @@ import java.awt.Cursor;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JList;
+import javax.swing.JOptionPane;
 import javax.swing.SwingConstants;
 import javax.swing.JRadioButton;
 import java.awt.event.ActionListener;
@@ -80,11 +85,104 @@ public class Setting_Blog extends JFrame {
 	 * Create the frame.
 	 */
 	
+	public void remove_Cmt(int blogid) {
+		try {
+			Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
+			String DB_URL = "jdbc:sqlserver://localhost:62673;databaseName=Social_Network;integratedSecurity=true;";
+    		Connection conn = DriverManager.getConnection(DB_URL);					
+    		Statement stmt = conn.createStatement();
+    		String delete = "Delete from Comment Where BlogID = " + blogid;
+    		stmt.executeUpdate(delete);
+    		
+		} catch (ClassNotFoundException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		} catch (SQLException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+	}
+	
+	public void remove_Like(int blogid) {
+		try {
+			Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
+			String DB_URL = "jdbc:sqlserver://localhost:62673;databaseName=Social_Network;integratedSecurity=true;";
+    		Connection conn = DriverManager.getConnection(DB_URL);					
+    		Statement stmt = conn.createStatement();
+    		String delete = "Delete from LikeBlog Where BlogID = " + blogid;
+    		stmt.executeUpdate(delete);
+    		
+		} catch (ClassNotFoundException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		} catch (SQLException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		
+	}
+	
+	public void remove_Interaction(int blogid) {
+		try {
+			Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
+			String DB_URL = "jdbc:sqlserver://localhost:62673;databaseName=Social_Network;integratedSecurity=true;";
+    		Connection conn = DriverManager.getConnection(DB_URL);					
+    		Statement stmt = conn.createStatement();
+    		String delete = "Delete from Interaction Where blogId = " + blogid;
+    		stmt.executeUpdate(delete);
+    		
+		} catch (ClassNotFoundException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		} catch (SQLException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		
+	}
+	
+	public void remove_Status(int blogid) {
+		try {
+			Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
+			String DB_URL = "jdbc:sqlserver://localhost:62673;databaseName=Social_Network;integratedSecurity=true;";
+    		Connection conn = DriverManager.getConnection(DB_URL);					
+    		Statement stmt = conn.createStatement();
+    		String delete = "Delete from BlogStatus Where BlogID = " + blogid;
+    		stmt.executeUpdate(delete);
+    		
+		} catch (ClassNotFoundException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		} catch (SQLException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		
+	}
+	
+	public void remove_Blog(int blogid) {
+		try {
+			Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
+			String DB_URL = "jdbc:sqlserver://localhost:62673;databaseName=Social_Network;integratedSecurity=true;";
+    		Connection conn = DriverManager.getConnection(DB_URL);					
+    		Statement stmt = conn.createStatement();
+    		String delete = "Delete from Blog Where BlogID = " + blogid;
+    		stmt.executeUpdate(delete);
+    		
+		} catch (ClassNotFoundException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		} catch (SQLException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		
+	}
 
 	public Setting_Blog() {
 		this.setTitle("Setting Blog");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 656, 460);
+		setBounds(100, 100, 656, 503);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
@@ -290,6 +388,32 @@ public class Setting_Blog extends JFrame {
 		btnNewButton_3.setBounds(386, 369, 85, 44);
 		contentPane.add(btnNewButton_3);
 		
+		JButton btnNewButton_3_1 = new JButton("Show cmt");
+		btnNewButton_3_1.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				if(blog_Id > 0) {
+					Setting_Blog.this.dispose();
+					Setting_Cmt st = new Setting_Cmt(user,blog_Id);
+					st.setVisible(true);
+				}
+				else {
+					
+				}
+				
+			}
+		});
+		btnNewButton_3_1.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+		btnNewButton_3_1.setBackground(new Color(210, 180, 140));
+		btnNewButton_3_1.setBounds(105, 381, 99, 44);
+		contentPane.add(btnNewButton_3_1);
+		
+		JButton btnNewButton_3_2 = new JButton("Delete");
+		
+		btnNewButton_3_2.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+		btnNewButton_3_2.setBackground(new Color(255, 69, 0));
+		btnNewButton_3_2.setBounds(10, 381, 85, 44);
+		contentPane.add(btnNewButton_3_2);
+		
 		
 		
 		
@@ -330,6 +454,35 @@ public class Setting_Blog extends JFrame {
 				
 			}
 			
+		});
+		
+		btnNewButton_3_2.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				
+				if(blog_Id > 0) {
+					if(JOptionPane.showConfirmDialog(null,"Are you sure you want to delete this cmt?", "Confirmation",JOptionPane.YES_NO_OPTION) == 0)
+					{
+						remove_Cmt(blog_Id);
+						remove_Like(blog_Id);
+						remove_Interaction(blog_Id);
+						remove_Status(blog_Id);
+						remove_Blog(blog_Id);
+						squery.getAllBlog("username");
+						list_Blog.clear();
+						for(int i = 0; i < squery.getBlog().size(); i++) {
+							list_Blog.add(squery.getBlog().get(i));
+						}
+						
+						String[] list_blog = new String[list_Blog.size()];
+						for(int i = 0; i < list_Blog.size(); i++) {
+							list_blog[i] = list_Blog.get(i).get_Title();
+						}
+						list.setListData(list_blog);
+					}
+				}
+				
+				
+			}
 		});
 		
 		btnNewButton_3.addActionListener(new ActionListener() {

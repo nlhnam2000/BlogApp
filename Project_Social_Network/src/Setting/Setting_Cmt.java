@@ -3,11 +3,16 @@ package Setting;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Cursor;
+import java.awt.Dimension;
 import java.awt.EventQueue;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 
 import javax.swing.BorderFactory;
@@ -16,6 +21,7 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JList;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JScrollPane;
@@ -27,6 +33,7 @@ import javax.swing.border.LineBorder;
 
 import Blog.Blogs;
 import Interactive.Interactives;
+import LoginDesign.FrameLogin;
 import Query.QuerySQL;
 import User.Users;
 
@@ -35,7 +42,7 @@ import javax.swing.JTextArea;
 public class Setting_Cmt extends JFrame {
 
 	Users user;
-	Blogs blog;
+	int blogID;
 	
 	//////
 	
@@ -59,23 +66,26 @@ public class Setting_Cmt extends JFrame {
 	/**
 	 * Launch the application.
 	 */
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					Setting_Cmt frame = new Setting_Cmt();
-					frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
+//	public static void main(String[] args) {
+//		EventQueue.invokeLater(new Runnable() {
+//			public void run() {
+//				try {
+//					Setting_Cmt frame = new Setting_Cmt();
+//					frame.setVisible(true);
+//				} catch (Exception e) {
+//					e.printStackTrace();
+//				}
+//			}
+//		});
+//	}
 
 	/**
 	 * Create the frame.
 	 */
-	public Setting_Cmt() {
+	public Setting_Cmt(Users u, int blogId) {
+		this.user = u;
+		this.blogID = blogId;
+		
 		this.setTitle("Setting Blog");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 656, 460);
@@ -90,7 +100,7 @@ public class Setting_Cmt extends JFrame {
 		contentPane.add(panel);
 		panel.setLayout(null);
 		
-		JLabel lblNewLabel = new JLabel("Username:");
+		JLabel lblNewLabel = new JLabel("Username: ");
 		lblNewLabel.setBounds(10, 10, 169, 30);
 		panel.add(lblNewLabel);
 		
@@ -117,7 +127,7 @@ public class Setting_Cmt extends JFrame {
 		contentPane.add(scrollPane);
 		
 		squery = new QuerySQL();
-		squery.getAllCmt(1);
+		squery.getAllCmt(this.blogID);
 		list_Cmt.clear();
 		for(int i = 0; i < squery.getCmt().size(); i++) {
 			list_Cmt.add(squery.getCmt().get(i));
@@ -140,7 +150,7 @@ public class Setting_Cmt extends JFrame {
 		
 		JLabel lblNewLabel_1 = new JLabel("Edit");
 		lblNewLabel_1.setHorizontalAlignment(SwingConstants.CENTER);
-		lblNewLabel_1.setBounds(10, 49, 90, 24);
+		lblNewLabel_1.setBounds(10, 79, 90, 24);
 		panel_1.add(lblNewLabel_1);
 		
 		rdbtnNewRadioButton = new JRadioButton("Can edit");
@@ -151,12 +161,12 @@ public class Setting_Cmt extends JFrame {
 			}
 		});
 		rdbtnNewRadioButton.setBackground(new Color(255, 255, 255));
-		rdbtnNewRadioButton.setBounds(77, 79, 103, 21);
+		rdbtnNewRadioButton.setBounds(77, 109, 103, 21);
 		panel_1.add(rdbtnNewRadioButton);
 		
 		rdbtnNotEdit = new JRadioButton("Not edit");
 		rdbtnNotEdit.setBackground(new Color(255, 255, 255));
-		rdbtnNotEdit.setBounds(77, 114, 103, 21);
+		rdbtnNotEdit.setBounds(77, 132, 103, 21);
 		
 		ButtonGroup group = new ButtonGroup();
 		group.add(rdbtnNewRadioButton);
@@ -168,12 +178,12 @@ public class Setting_Cmt extends JFrame {
 		
 		JLabel lblNewLabel_1_2 = new JLabel("Delete");
 		lblNewLabel_1_2.setHorizontalAlignment(SwingConstants.CENTER);
-		lblNewLabel_1_2.setBounds(10, 141, 90, 24);
+		lblNewLabel_1_2.setBounds(10, 159, 90, 24);
 		panel_1.add(lblNewLabel_1_2);
 		
 		rdbtnCanDelete = new JRadioButton("Can delete");
 		rdbtnCanDelete.setBackground(Color.WHITE);
-		rdbtnCanDelete.setBounds(77, 171, 103, 21);
+		rdbtnCanDelete.setBounds(77, 189, 103, 21);
 		panel_1.add(rdbtnCanDelete);
 		
 		rdbtnNotDelete = new JRadioButton("Not delete");
@@ -192,11 +202,13 @@ public class Setting_Cmt extends JFrame {
 		panel_1.add(lblNewLabel_2);
 		
 		JScrollPane scrollPane_1 = new JScrollPane();
-		scrollPane_1.setBounds(110, 15, 208, 24);
+		scrollPane_1.setBounds(110, 15, 250, 64);
 		panel_1.add(scrollPane_1);
 		
 		textArea = new JTextArea();
 		textArea.setEnabled(false);
+//		textArea.setPreferredSize(new Dimension(240, 50));
+//		scrollPane_1.setPreferredSize(new Dimension(250,50));
 		scrollPane_1.setViewportView(textArea);
 		
 	
@@ -275,6 +287,62 @@ public class Setting_Cmt extends JFrame {
 		btnNewButton_3.setBackground(new Color(135, 206, 250));
 		btnNewButton_3.setBounds(386, 369, 85, 44);
 		contentPane.add(btnNewButton_3);
+		
+		JButton btnNewButton_3_1 = new JButton("Delete");
+		btnNewButton_3_1.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				
+				if(cmt_Id > 0) {
+					if(JOptionPane.showConfirmDialog(null,"Are you sure you want to delete this cmt?", "Confirmation",JOptionPane.YES_NO_OPTION) == 0){
+						try {
+							Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
+							String DB_URL = "jdbc:sqlserver://localhost:62673;databaseName=Social_Network;integratedSecurity=true;";
+				    		Connection conn = DriverManager.getConnection(DB_URL);					
+				    		Statement stmt = conn.createStatement();
+				    		String delete = "Delete from Comment Where CommentID = " + cmt_Id;
+				    		stmt.executeUpdate(delete);
+				    		
+				    		squery.getAllCmt(blogID);
+				    		list_Cmt.clear();
+				    		for(int i = 0; i < squery.getCmt().size(); i++) {
+				    			list_Cmt.add(squery.getCmt().get(i));
+				    		}
+				    		String[] list_blog = new String[list_Cmt.size()];
+							for(int i = 0; i < list_Cmt.size(); i++) {
+								list_blog[i] = list_Cmt.get(i).get_Username();
+							}
+							list.setListData(list_blog);
+				    		
+						} catch (ClassNotFoundException e1) {
+							// TODO Auto-generated catch block
+							e1.printStackTrace();
+						} catch (SQLException e1) {
+							// TODO Auto-generated catch block
+							e1.printStackTrace();
+						}
+					}
+				}
+				
+	    		
+			}
+		});
+		btnNewButton_3_1.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+		btnNewButton_3_1.setBackground(new Color(255, 69, 0));
+		btnNewButton_3_1.setBounds(10, 369, 85, 44);
+		contentPane.add(btnNewButton_3_1);
+		
+		JButton btnNewButton_3_2 = new JButton("Back");
+		btnNewButton_3_2.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				Setting_Cmt.this.dispose();
+				Setting_Blog st = new Setting_Blog();
+				st.setVisible(true);
+			}
+		});
+		btnNewButton_3_2.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+		btnNewButton_3_2.setBackground(new Color(238, 232, 170));
+		btnNewButton_3_2.setBounds(105, 369, 85, 44);
+		contentPane.add(btnNewButton_3_2);
 		
 		
 		

@@ -52,7 +52,7 @@ public class AddForm extends JFrame {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					AddForm frame = new AddForm(user);
+					AddForm frame = new AddForm();
 					frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -64,8 +64,8 @@ public class AddForm extends JFrame {
 	/**
 	 * Create the frame.
 	 */
-	public AddForm(Users u) {
-		user = new Users(u);
+	public AddForm() {
+	
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 600, 400);
 		contentPane = new JPanel();
@@ -166,14 +166,14 @@ public class AddForm extends JFrame {
 					boolean result = accQuery.addAccount(account);
 					if (result == false) {
 						JOptionPane.showMessageDialog(null, "Fail to add a new account.");
-						AccountManagement accountManagementFrame = new AccountManagement(u);
+						AccountManagement accountManagementFrame = new AccountManagement();
 						accountManagementFrame.setVisible(true);
 						accountManagementFrame.showUser();
 						dispose();
 					}
 					else {
 						JOptionPane.showMessageDialog(null, "A new account was successfully added to database.");
-						AccountManagement accountManagementFrame = new AccountManagement(u);
+						AccountManagement accountManagementFrame = new AccountManagement();
 						accountManagementFrame.setVisible(true);
 						accountManagementFrame.showUser();
 						dispose();
