@@ -19,10 +19,12 @@ import javax.swing.border.EmptyBorder;
 import User.Users;
 import Blog.Blogs;
 import Blog.postBlogFrame;
+import LoginDesign.FrameLogin;
 import Blog.BlogFrame;
 import Status.BlogStatus;
 import Notification.Interaction;
 import Notification.NotificationManagement;
+import Profile.ProfileBlogPublic;
 import Query.QuerySQL;
 
 import java.util.*;
@@ -187,10 +189,11 @@ public class PageHome extends JFrame implements ActionListener {
 		postBlogBtn.addActionListener(this);
 		helloUser.addMouseListener(new MouseAdapter() {
 			public void mouseClicked(MouseEvent e) {
-				NotificationManagement frame = new NotificationManagement();
-				frame.showInfo(user);
-				frame.showNotification();
+				dispose();
+				ProfileBlogPublic frame = new ProfileBlogPublic(user);
 				frame.setVisible(true);
+				frame.showInfo();
+				frame.showBlog();
 			}
 			
 		});

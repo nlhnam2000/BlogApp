@@ -11,6 +11,7 @@ import Interactive.Interactives;
 import Interactive.LikeBlog;
 import Notification.Interaction;
 import PageHome.PageHome;
+import Profile.ProfileBlogPublic;
 import Status.BlogStatus;
 
 import javax.swing.ImageIcon;
@@ -236,6 +237,7 @@ public class FrameLogin extends JFrame {
 						// redirect to home page: 
 						PageHome pageHome = new PageHome(FrameLogin.this.user); 
 						FrameLogin.this.dispose();
+				
 						pageHome.setVisible(true);
 						
 					}

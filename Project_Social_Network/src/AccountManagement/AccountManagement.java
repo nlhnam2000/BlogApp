@@ -294,33 +294,35 @@ public class AccountManagement extends JFrame {
 		btnNewButton_2.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				removeId = txtBoxRemove.getText();
-		
-				remove_Status(Integer.parseInt(removeId));
-				AccountQuery accQuery = new AccountQuery();
-			
-				accQuery.removeInteractionByUserId(removeId);
+				if(removeId.length() > 0) {
+					remove_Status(Integer.parseInt(removeId));
+					AccountQuery accQuery = new AccountQuery();
 				
-				accQuery.removeLikeByUserId(removeId);
-				accQuery.removeCommentByUserId(removeId);
-				
-				ArrayList<String> list = new ArrayList<String>();
-				list = accQuery.getAllBlogId(removeId);
-				
-				for (String item : list) {
-					accQuery.removeLikeByBlogId(item);
-					accQuery.removeCommentByBlogId(item);
+					accQuery.removeInteractionByUserId(removeId);
+					
+					accQuery.removeLikeByUserId(removeId);
+					accQuery.removeCommentByUserId(removeId);
+					
+					ArrayList<String> list = new ArrayList<String>();
+					list = accQuery.getAllBlogId(removeId);
+					
+					for (String item : list) {
+						accQuery.removeLikeByBlogId(item);
+						accQuery.removeCommentByBlogId(item);
+					}
+					
+					accQuery.removeBlogByUserId(removeId);
+					
+					if (accQuery.removeById(removeId) == 1) {
+						JOptionPane.showMessageDialog(null, "Successfully removed an account from database", "InfoBox: ", JOptionPane.INFORMATION_MESSAGE);
+					}
+					else {
+						JOptionPane.showMessageDialog(null, "Fail to remove an account from database", "InfoBox: ", JOptionPane.INFORMATION_MESSAGE);
+					}
+					
+					showUser();
 				}
 				
-				accQuery.removeBlogByUserId(removeId);
-				
-				if (accQuery.removeById(removeId) == 1) {
-					JOptionPane.showMessageDialog(null, "Successfully removed an account from database", "InfoBox: ", JOptionPane.INFORMATION_MESSAGE);
-				}
-				else {
-					JOptionPane.showMessageDialog(null, "Fail to remove an account from database", "InfoBox: ", JOptionPane.INFORMATION_MESSAGE);
-				}
-				
-				showUser();
 			}
 		});
 		btnNewButton_2.setFont(new Font("Tahoma", Font.PLAIN, 14));

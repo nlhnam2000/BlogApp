@@ -12,6 +12,9 @@ import javax.swing.border.LineBorder;
 
 import AccountManagement.Account;
 import Blog.Blogs;
+import LoginDesign.FrameLogin;
+import Notification.NotificationManagement;
+import PageHome.PageHome;
 import User.Users;
 
 import javax.swing.JScrollPane;
@@ -278,16 +281,40 @@ public class ProfileBlogPublic extends JFrame {
 		btnPublish.setEnabled(false);
 		
 		JButton btnHome = new JButton("Homepage");
+		btnHome.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				dispose();
+				PageHome pageHome = new PageHome(user); 
+				pageHome.setVisible(true);
+			}
+		});
 		btnHome.setFont(new Font("Tahoma", Font.PLAIN, 16));
 		btnHome.setBounds(10, 9, 125, 21);
 		contentPane.add(btnHome);
 		
 		JButton btnActivities = new JButton("Notification");
+		btnActivities.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				ProfileBlogPublic.this.dispose();
+				NotificationManagement frame = new NotificationManagement();
+				frame.showInfo(user);
+				frame.showNotification();
+				frame.setVisible(true);
+				
+			}
+		});
 		btnActivities.setFont(new Font("Tahoma", Font.PLAIN, 16));
 		btnActivities.setBounds(10, 40, 125, 21);
 		contentPane.add(btnActivities);
 		
 		JButton btnLogOut = new JButton("Log out");
+		btnLogOut.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				ProfileBlogPublic.this.dispose();
+				FrameLogin lg = new FrameLogin();
+				lg.setVisible(true);
+			}
+		});
 		btnLogOut.setFont(new Font("Tahoma", Font.PLAIN, 16));
 		btnLogOut.setBounds(10, 72, 125, 21);
 		contentPane.add(btnLogOut);

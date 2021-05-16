@@ -28,7 +28,9 @@ import javax.swing.border.LineBorder;
 
 import AccountManagement.Account;
 import Blog.Blogs;
+import LoginDesign.FrameLogin;
 import Profile.BlogQuery;
+import Profile.ProfileBlogPublic;
 import Profile.ProfileQuery;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
@@ -178,11 +180,6 @@ public class NotificationManagement extends JFrame implements ActionListener {
 		separator_2.setBounds(350, 52, 5, 198);
 		body.add(separator_2);
 		
-		JButton btnViewBlog = new JButton("View Blog");
-		btnViewBlog.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		btnViewBlog.setBounds(117, 220, 103, 21);
-		body.add(btnViewBlog);
-		
 		textField = new JTextField();
 		textField.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		textField.setBounds(365, 97, 211, 19);
@@ -230,12 +227,28 @@ public class NotificationManagement extends JFrame implements ActionListener {
 		btnHome.setBounds(10, 9, 125, 21);
 		contentPane.add(btnHome);
 		
-		JButton btnActivities = new JButton("Notification");
+		JButton btnActivities = new JButton("Home personel");
+		btnActivities.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				dispose();
+				ProfileBlogPublic frame = new ProfileBlogPublic(user);
+				frame.setVisible(true);
+				frame.showInfo();
+				frame.showBlog();
+			}
+		});
 		btnActivities.setFont(new Font("Tahoma", Font.PLAIN, 16));
 		btnActivities.setBounds(10, 40, 125, 21);
 		contentPane.add(btnActivities);
 		
 		JButton btnLogOut = new JButton("Log out");
+		btnLogOut.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				dispose();
+				FrameLogin lg = new FrameLogin();
+				lg.setVisible(true);
+			}
+		});
 		btnLogOut.setFont(new Font("Tahoma", Font.PLAIN, 16));
 		btnLogOut.setBounds(10, 72, 125, 21);
 		contentPane.add(btnLogOut);
@@ -255,6 +268,9 @@ public class NotificationManagement extends JFrame implements ActionListener {
 		String command = e.getActionCommand(); 
 		if (command.equals("Homepage")) {
 			dispose();
+			PageHome pageHome = new PageHome(user); 
+			pageHome.setVisible(true);
+			
 		}
 	}
 }
