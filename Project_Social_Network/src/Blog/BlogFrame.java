@@ -38,7 +38,6 @@ public class BlogFrame extends JFrame {
 	JButton likeButton = new JButton(); 
 	JButton commentButton = new JButton(); 
 	
-	
 	static Users user; 
 	static Blogs blog; 
 	// int UserID = 0;
@@ -52,13 +51,14 @@ public class BlogFrame extends JFrame {
 		setTitle("Blog of " + user.getUsername()); 
 		setBounds(500, 300, 600, 400);
 		contentPane.setLayout(new BoxLayout(contentPane, BoxLayout.PAGE_AXIS));
-		contentPane.setBackground(new PageHome(user).getBackground());
-		contentPane.setBorder(BorderFactory.createLineBorder(Color.black));
+		contentPane.setBackground(new Color(0,138,138));
+		contentPane.setBorder(BorderFactory.createLineBorder(new Color(0,138,138)));
 		
 		titleBlog = new JLabel(blog.get_Title()); 
-		titleBlog.setFont(new Font("Tahoma", Font.BOLD, 15));
-		usernameBlog = new JLabel(blog.get_Username()); 
+		titleBlog.setFont(new Font("Tahoma", Font.BOLD, 13));
+		usernameBlog = new JLabel("• posted by " + blog.get_Username()); 
 		datePosted = new JLabel(" at " + blog.get_Date());  
+		datePosted.setForeground(Color.gray);
 		bodyBlog = new JLabel(blog.get_Body()); 
 		
 		JPanel subPanel = new JPanel(); 
@@ -201,7 +201,7 @@ public class BlogFrame extends JFrame {
 			JPanel panel = new JPanel(); 
 			panel.setLayout(new BoxLayout(panel, BoxLayout.PAGE_AXIS));
 			panel.setBackground(Color.white);
-			panel.setBorder(BorderFactory.createLineBorder(Color.black));
+			panel.setBorder(BorderFactory.createLineBorder(new Color(0, 138, 138)));
 			
 			JPanel subPanel = new JPanel(); 
 			subPanel.setLayout(new FlowLayout(FlowLayout.LEFT));

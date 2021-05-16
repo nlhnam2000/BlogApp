@@ -39,24 +39,6 @@ public class PageHome extends JFrame implements ActionListener {
 	JLabel helloUser; 
 	static Users user; 
 	ArrayList<Blogs> blogList = new ArrayList<>();
-	
-
-	/**
-	 * Launch the application.
-	 */
-	
-//	public static void main(String[] args) {
-//		EventQueue.invokeLater(new Runnable() {
-//			public void run() {
-//				try {
-//					PageHome frame = new PageHome(user);
-//					frame.setVisible(true);
-//				} catch (Exception e) {
-//					e.printStackTrace();
-//				}
-//			}
-//		});
-//	}
 
 	/**
 	 * Create the frame.
@@ -74,7 +56,8 @@ public class PageHome extends JFrame implements ActionListener {
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(0,0,0,0));
 		contentPane.setLayout(new BoxLayout(contentPane, BoxLayout.Y_AXIS));
-		contentPane.setBackground(new Color(238,238,238));
+		// contentPane.setBackground(new Color(238,238,238));
+		contentPane.setBackground(new Color(0, 139, 139));
 		
 		// set up all panel: 
 		JPanel navbarPanel = new JPanel(); // navbar
@@ -154,26 +137,35 @@ public class PageHome extends JFrame implements ActionListener {
 		container.add(scrollPane, gbc); 
 		
 		sidebarPanel.setLayout(new BoxLayout(sidebarPanel, BoxLayout.PAGE_AXIS));
-		sidebarPanel.setBackground(Color.white);
-		sidebarPanel.setBorder(BorderFactory.createLineBorder(Color.black));
+		// sidebarPanel.setBackground(getContentPane().getBackground());
+		sidebarPanel.setBackground(new Color(50, 100, 120));
+		sidebarPanel.setBorder(BorderFactory.createLineBorder(new Color(0, 138, 138)));
+		sidebarPanel.setBorder(new EmptyBorder(10,10,10,10));
 		JScrollPane sidebarScroll = new JScrollPane(sidebarPanel); 
-		sidebarScroll.setBorder(null);
+		// sidebarScroll.setBorder(null);
 		sidebarScroll.setPreferredSize(new Dimension(300, 700));
 		sidebarScroll.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_NEVER); 
+		sidebarScroll.setBorder(null);
  		
 		sidebarPanel.add(Box.createRigidArea(new Dimension(0, 10))); 
 		JLabel text = new JLabel("MOST RECENT BLOG"); 
+		text.setForeground(Color.white);
 		text.setFont(new Font("Tahoma", Font.BOLD, 15));
 		sidebarPanel.add(text);
-		sidebarPanel.add(Box.createRigidArea(new Dimension(30, 20))); 
+		sidebarPanel.add(Box.createRigidArea(new Dimension(0, 20))); 
 		
 		ArrayList<JLabel> titleBlog = showBlogTitle(blogList); 
 		for (JLabel title : titleBlog) {
 			JPanel panel = new JPanel(); 
 			panel.setLayout(new BorderLayout());
+			panel.setBackground(Color.white);
+			panel.setBorder(BorderFactory.createLineBorder(new Color(0,138,138)));
+			panel.setBorder(new EmptyBorder(5,5,5,5));
 			title.setFont(new Font("Tahoma", Font.BOLD, 12));
+			title.setForeground(new Color(0,100,120));
 			panel.add(title, BorderLayout.WEST); 
 			JButton viewButton = new JButton("View"); 
+			viewButton.setForeground(Color.blue);
 			viewButton.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					// System.out.println(title.getText()); 
@@ -233,13 +225,13 @@ public class PageHome extends JFrame implements ActionListener {
 			panel.setLayout(new BoxLayout(panel, BoxLayout.PAGE_AXIS));
 			// panel.setPreferredSize(new Dimension(590, 100));
 			panel.setBackground(Color.white);
-			panel.setBorder(BorderFactory.createLineBorder(Color.black));
+			panel.setBorder(BorderFactory.createLineBorder(new Color(0, 138, 138)));
 			
 			JPanel subPanel = new JPanel(); 
 			subPanel.setLayout(new FlowLayout(FlowLayout.LEFT));
 			subPanel.setBackground(Color.white);
 			JLabel titleLabel = new JLabel(blog.get_Title()); 
-			titleLabel.setFont(new Font("Tahoma", Font.BOLD, 15));
+			titleLabel.setFont(new Font("Tahoma", Font.BOLD, 13));
 			JLabel usernameLabel = new JLabel("• Posted by " + blog.get_Username()); 
 			JLabel datePosted = new JLabel(" at " + blog.get_Date()); 
 			datePosted.setForeground(Color.gray);
