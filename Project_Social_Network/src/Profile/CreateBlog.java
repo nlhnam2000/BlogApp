@@ -12,6 +12,8 @@ import javax.swing.border.LineBorder;
 
 import AccountManagement.Account;
 import AccountManagement.AccountQuery;
+import AccountManagement.UpdateForm;
+import User.Users;
 
 import javax.swing.JScrollPane;
 import javax.swing.JTextPane;
@@ -32,7 +34,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 
 public class CreateBlog extends JFrame {
-	private final String id = "34";
+	static Users user;
 	private JPanel contentPane;
 	private ImageIcon edit = new ImageIcon("src/FrameImages/edit.jpg");
 	private JTextField Tfield_title;
@@ -40,7 +42,7 @@ public class CreateBlog extends JFrame {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					CreateBlog frame = new CreateBlog();
+					CreateBlog frame = new CreateBlog(user);
 					frame.setVisible(true);
 					frame.showInfo();
 					frame.createBlog();
@@ -63,7 +65,7 @@ public class CreateBlog extends JFrame {
 		subInfo.setBounds(150, 35, 500, 60);
 		
 		ProfileQuery profile = new ProfileQuery();
-		Account profileInfo = profile.getAllAccount(this.id);
+		Account profileInfo = profile.getAllAccount(String.valueOf(this.user.getUserID()));
 		System.out.println(profileInfo.getUsername());
 		usernameProfile.setText(profileInfo.getFirstName() + " " + profileInfo.getLastName() + " ( " + profileInfo.getUsername() + " )");
 		usernameProfile.setEditable(false);
@@ -82,7 +84,7 @@ public class CreateBlog extends JFrame {
 		contentPane.add(body);
 		body.setLayout(null);
 		AccountQuery query = new AccountQuery();
-		Account account = query.getAllAccount(id);
+		Account account = query.getAllAccount(String.valueOf(this.user.getUserID()));
 		
 		JTextPane postOwnerInfo = new JTextPane();
 		postOwnerInfo.setBackground(new Color(245, 245, 245));
@@ -134,7 +136,7 @@ public class CreateBlog extends JFrame {
 		JButton btnBack = new JButton("Back");
 		btnBack.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				ProfileBlogPublic profileBlog = new ProfileBlogPublic();
+				ProfileBlogPublic profileBlog = new ProfileBlogPublic(user);
 				profileBlog.setVisible(true);
 				profileBlog.showInfo();
 				profileBlog.showBlog();
@@ -150,8 +152,8 @@ public class CreateBlog extends JFrame {
 		BtnPublic.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				AccountQuery query = new AccountQuery();
-				Account account = query.getAllAccount(CreateBlog.this.id);
-				String userId = CreateBlog.this.id;
+				Account account = query.getAllAccount(String.valueOf(CreateBlog.this.user.getUserID()));
+				String userId = String.valueOf(CreateBlog.this.user.getUserID());
 				String content = contentTxtArea.getText();
 				String title = titleTxt.getText();
 				String username = account.getUsername();
@@ -175,7 +177,9 @@ public class CreateBlog extends JFrame {
 		separator_1.setBounds(10, 40, 566, 2);
 		body.add(separator_1);
 	}
-	public CreateBlog() {
+	public CreateBlog(Users u) {
+		user = new Users(u);
+		
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 600, 400);
 		contentPane = new JPanel();
@@ -207,6 +211,13 @@ public class CreateBlog extends JFrame {
 		contentPane.add(btnLogOut);
 		
 		JButton btnEditImg = new JButton(edit);
+		btnEditImg.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				EditProfileForm frameEdit = new EditProfileForm(user);
+				frameEdit.setVisible(true);
+				CreateBlog.this.dispose();
+			}
+		});
 		edit.setDescription("Edit profile");
 		btnEditImg.setBounds(483, 30, 65, 65);
 		contentPane.add(btnEditImg);		

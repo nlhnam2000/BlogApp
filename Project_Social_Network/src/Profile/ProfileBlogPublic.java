@@ -12,6 +12,7 @@ import javax.swing.border.LineBorder;
 
 import AccountManagement.Account;
 import Blog.Blogs;
+import User.Users;
 
 import javax.swing.JScrollPane;
 import javax.swing.JTextPane;
@@ -40,8 +41,8 @@ import javax.swing.DefaultListModel;
 import java.awt.TextArea;
 
 public class ProfileBlogPublic extends JFrame {
+	static Users user; 
 	private ArrayList<Blogs> blog;
-	private final String id = "34";
 	private String blogId;
 	private JPanel contentPane;
 	private ImageIcon edit = new ImageIcon("src/FrameImages/edit.jpg");
@@ -61,7 +62,7 @@ public class ProfileBlogPublic extends JFrame {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					ProfileBlogPublic frame = new ProfileBlogPublic();
+					ProfileBlogPublic frame = new ProfileBlogPublic(user);
 					frame.setVisible(true);
 					frame.showInfo();
 					frame.showBlog();
@@ -75,7 +76,7 @@ public class ProfileBlogPublic extends JFrame {
 	public void showBlog() {
 		BlogQuery blogQuery = new BlogQuery();
 		this.blog = new ArrayList<Blogs>();
-		blogQuery.getBlogByUsername("sangnguyen");
+		blogQuery.getBlogByUsername(user.getUsername());
 		blog = blogQuery.getBlog();
 		String[] values = new String[blog.size()];
 		for (int i = 0; i < blog.size(); i++) {
@@ -121,7 +122,7 @@ public class ProfileBlogPublic extends JFrame {
 		subInfo.setBounds(150, 35, 500, 60);
 		
 		ProfileQuery profile = new ProfileQuery();
-		Account profileInfo = profile.getAllAccount(this.id);
+		Account profileInfo = profile.getAllAccount(String.valueOf(user.getUserID()));
 		System.out.println(profileInfo.getUsername());
 		usernameProfile.setText(profileInfo.getFirstName() + " " + profileInfo.getLastName() + " ( " + profileInfo.getUsername() + " )");
 		usernameProfile.setEditable(false);
@@ -136,7 +137,8 @@ public class ProfileBlogPublic extends JFrame {
 		// TODO Auto-generated method stub
 		return null;
 	}
-	public ProfileBlogPublic() {
+	public ProfileBlogPublic(Users u) {
+		user = new Users(u);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 600, 400);
 		contentPane = new JPanel();
@@ -161,7 +163,7 @@ public class ProfileBlogPublic extends JFrame {
 		JButton btnCreateBlog = new JButton("CREATE A BLOG");
 		btnCreateBlog.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				CreateBlog frame = new CreateBlog();
+				CreateBlog frame = new CreateBlog(user);
 				frame.showInfo();
 				frame.createBlog();
 				frame.setVisible(true);
@@ -291,6 +293,13 @@ public class ProfileBlogPublic extends JFrame {
 		contentPane.add(btnLogOut);
 		
 		JButton btnEditImg = new JButton(edit);
+		btnEditImg.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				EditProfileForm frameEdit = new EditProfileForm(u);
+				frameEdit.setVisible(true);
+				ProfileBlogPublic.this.dispose();
+			}
+		});
 		edit.setDescription("Edit profile");
 		btnEditImg.setBounds(498, 28, 65, 65);
 		contentPane.add(btnEditImg);		

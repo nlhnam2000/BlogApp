@@ -26,7 +26,7 @@ public class ProfileQuery {
 //			String DB_URL = "jdbc:sqlserver://localhost:62673;databaseName=Social_Network;integratedSecurity=true;";
 //			Connection conn = DriverManager.getConnection(DB_URL);
 			
-			String dbURL = "jdbc:sqlserver://localhost:1433;DatabaseName=Social_Network";
+			String dbURL = "jdbc:sqlserver://localhost:62673;databaseName=Social_Network;integratedSecurity=true;";
 			String user = "sa";
 			String pass = "Password123@jkl#";
 			Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver"); 
@@ -50,9 +50,8 @@ public class ProfileQuery {
 	}
 	public boolean updateAccount(Account accountDto) {
 		try {
-			Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
-			String DB_URL = "jdbc:sqlserver://localhost:1433;databaseName=Social_Network;integratedSecurity=true;";
-			Connection conn = DriverManager.getConnection(DB_URL);
+			Connect_SQL connect = new Connect_SQL();
+			Connection conn = connect.getConnection();
 			Statement stmt = conn.createStatement();
 			String password = accountDto.getPassword();
 			System.out.println(accountDto.getId());

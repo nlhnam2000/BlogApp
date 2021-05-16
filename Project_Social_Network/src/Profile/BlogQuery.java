@@ -25,9 +25,8 @@ public class BlogQuery{
 
 	public void getBlogByUsername(String username) {
     	try {
-			Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
-    		String DB_URL = "jdbc:sqlserver://localhost:1433;databaseName=Social_Network;integratedSecurity=true;";
-    		Connection conn = DriverManager.getConnection(DB_URL);
+    		Connect_SQL connect = new Connect_SQL();
+			Connection conn = connect.getConnection();
     		Statement stmt = conn.createStatement();
     		String getAllUser = "Select * From Blog Where Username = \'" + username + "\'";
     		ResultSet r = stmt.executeQuery(getAllUser);
@@ -51,9 +50,8 @@ public class BlogQuery{
 	
 	public boolean insertBlog(Account account, String title, String content, boolean commentEnable, String date) {
 		try {
-			Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
-			String DB_URL = "jdbc:sqlserver://localhost:1433;databaseName=Social_Network;integratedSecurity=true;";
-			Connection conn = DriverManager.getConnection(DB_URL);
+			Connect_SQL connect = new Connect_SQL();
+			Connection conn = connect.getConnection();
 			Statement stmt = conn.createStatement();
 			String queryStatement = "Insert into Blog (UsernameID, Username, Title, Body, CommentEnabled, DeleteBlog, Edit, Date_of_blog, HitComment, HitLike) "
 					+ "				values ('" + account.getId()
@@ -80,9 +78,8 @@ public class BlogQuery{
 
 	public boolean updateBlog(String id, String titleBlog, String contentBlog, String date) {
 		try {
-			Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
-			String DB_URL = "jdbc:sqlserver://localhost:1433;databaseName=Social_Network;integratedSecurity=true;";
-			Connection conn = DriverManager.getConnection(DB_URL);
+			Connect_SQL connect = new Connect_SQL();
+			Connection conn = connect.getConnection();
 			Statement stmt = conn.createStatement();
 			String queryStatement = "Update Blog "
 								+ "Set Title = '" + titleBlog + "', "

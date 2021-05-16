@@ -30,11 +30,12 @@ import javax.swing.JOptionPane;
 import com.toedter.calendar.JDateChooser;
 
 import HashPw.BCrypt;
+import User.Users;
 
 import javax.swing.JMenuBar;
 
 public class AddForm extends JFrame {
-
+	static Users user; 
 	private JPanel contentPane;
 	private JTextField tfield_username;
 	private JPasswordField pfield_password;
@@ -51,7 +52,7 @@ public class AddForm extends JFrame {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					AddForm frame = new AddForm();
+					AddForm frame = new AddForm(user);
 					frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -63,7 +64,8 @@ public class AddForm extends JFrame {
 	/**
 	 * Create the frame.
 	 */
-	public AddForm() {
+	public AddForm(Users u) {
+		user = new Users(u);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 600, 400);
 		contentPane = new JPanel();
@@ -164,14 +166,14 @@ public class AddForm extends JFrame {
 					boolean result = accQuery.addAccount(account);
 					if (result == false) {
 						JOptionPane.showMessageDialog(null, "Fail to add a new account.");
-						AccountManagement accountManagementFrame = new AccountManagement();
+						AccountManagement accountManagementFrame = new AccountManagement(u);
 						accountManagementFrame.setVisible(true);
 						accountManagementFrame.showUser();
 						dispose();
 					}
 					else {
 						JOptionPane.showMessageDialog(null, "A new account was successfully added to database.");
-						AccountManagement accountManagementFrame = new AccountManagement();
+						AccountManagement accountManagementFrame = new AccountManagement(u);
 						accountManagementFrame.setVisible(true);
 						accountManagementFrame.showUser();
 						dispose();

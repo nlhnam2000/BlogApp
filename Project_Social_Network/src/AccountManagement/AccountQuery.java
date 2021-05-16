@@ -1,10 +1,13 @@
 package AccountManagement;
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+
+
 
 public class AccountQuery{
 	ArrayList<Account> account = new ArrayList<Account>();
@@ -18,13 +21,11 @@ public class AccountQuery{
 	public void setAccountList(ArrayList<Account> account) {
 		this.account = account;
 	}
-
 	public void getAllAccount() {
 		this.account.clear();
 		try {
-			Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
-			String DB_URL = "jdbc:sqlserver://localhost:62673;databaseName=Social_Network;integratedSecurity=true;";
-			Connection conn = DriverManager.getConnection(DB_URL);
+			Connect_SQL connect = new Connect_SQL();
+			Connection conn = connect.getConnection();
 			Statement stmt = conn.createStatement();
 			String getAllAccount = "Select * From User_Social";
 			ResultSet result = stmt.executeQuery(getAllAccount);
@@ -44,9 +45,8 @@ public class AccountQuery{
 	public Account getAllAccount(String id) {
 		this.account.clear();
 		try {
-			Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
-			String DB_URL = "jdbc:sqlserver://localhost:62673;databaseName=Social_Network;integratedSecurity=true;";
-			Connection conn = DriverManager.getConnection(DB_URL);
+			Connect_SQL connect = new Connect_SQL();
+			Connection conn = connect.getConnection();
 			Statement stmt = conn.createStatement();
 			String getAllAccount = "Select * From User_Social Where UserId = " + id;
 			ResultSet result = stmt.executeQuery(getAllAccount);
@@ -67,9 +67,8 @@ public class AccountQuery{
 
 	public void findAccountByIdAndUsername(String id, String username) {
 		try {
-			Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
-			String DB_URL = "jdbc:sqlserver://localhost:62673;databaseName=Social_Network;integratedSecurity=true;";
-			Connection conn = DriverManager.getConnection(DB_URL);
+			Connect_SQL connect = new Connect_SQL();
+			Connection conn = connect.getConnection();
 			Statement stmt = conn.createStatement();
 			String queryStatement = "";
 			if (username.equals("") && !id.equals("")) {
@@ -98,9 +97,8 @@ public class AccountQuery{
 
 	public boolean addAccount(Account accountDto) {
 		try {
-			Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
-			String DB_URL = "jdbc:sqlserver://localhost:62673;databaseName=Social_Network;integratedSecurity=true;";
-			Connection conn = DriverManager.getConnection(DB_URL);
+			Connect_SQL connect = new Connect_SQL();
+			Connection conn = connect.getConnection();
 			Statement stmt = conn.createStatement();
 			String password = accountDto.getPassword();
 			String queryStatement = "Insert into User_Social (First_Name, Last_Name, Username, Passwork, Date_of_birth, Adress, Email) "
@@ -125,9 +123,8 @@ public class AccountQuery{
 
 	public boolean updateAccount(Account accountDto) {
 		try {
-			Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
-			String DB_URL = "jdbc:sqlserver://localhost:62673;databaseName=Social_Network;integratedSecurity=true;";
-			Connection conn = DriverManager.getConnection(DB_URL);
+			Connect_SQL connect = new Connect_SQL();
+			Connection conn = connect.getConnection();
 			Statement stmt = conn.createStatement();
 			String password = accountDto.getPassword();
 			System.out.println(accountDto.getId());
@@ -151,4 +148,149 @@ public class AccountQuery{
 		}
 		return true;
 	}
+
+	public int removeById(String removeId) {
+		int rows = 0;
+		try {
+			Connect_SQL connect = new Connect_SQL();
+			Connection conn = connect.getConnection();
+			PreparedStatement stmt = null;
+			String queryStatement = "DELETE FROM User_Social WHERE UserId = " + removeId;
+			stmt = conn.prepareStatement(queryStatement);
+			rows = stmt.executeUpdate();
+		}catch(ClassNotFoundException ex) {
+			System.out.println("Error: unable to load driver class.");
+			System.exit(1);
+		} catch (SQLException e1) {
+			e1.printStackTrace();
+		}
+		System.out.println("8");
+		return rows;
+		
+	}
+	
+	public void removeInteractionByUserId(String id) {
+		
+		try {
+			Connect_SQL connect = new Connect_SQL();
+			Connection conn = connect.getConnection();
+			PreparedStatement stmt = null;
+			String queryStatement = "DELETE FROM Interaction WHERE visitorId = " + id;
+			stmt = conn.prepareStatement(queryStatement);
+			stmt.executeUpdate();
+		}catch(ClassNotFoundException ex) {
+			System.out.println("Error: unable to load driver class.");
+			System.exit(1);
+		} catch (SQLException e1) {
+			e1.printStackTrace();
+		}
+		System.out.println("1");
+	}
+
+	public void removeLikeByUserId(String removeId) {
+		try {
+			Connect_SQL connect = new Connect_SQL();
+			Connection conn = connect.getConnection();
+			PreparedStatement stmt = null;
+			String queryStatement = "DELETE FROM LikeBlog WHERE UsernameID = " + removeId;
+			stmt = conn.prepareStatement(queryStatement);
+			stmt.executeUpdate();
+		}catch(ClassNotFoundException ex) {
+			System.out.println("Error: unable to load driver class.");
+			System.exit(1);
+		} catch (SQLException e1) {
+			e1.printStackTrace();
+		}
+		System.out.println("2");
+	}
+	
+	public void removeCommentByUserId(String removeId) {
+		try {
+			Connect_SQL connect = new Connect_SQL();
+			Connection conn = connect.getConnection();
+			PreparedStatement stmt = null;
+			String queryStatement = "DELETE FROM Comment WHERE UsernameIDCmt = " + removeId;
+			stmt = conn.prepareStatement(queryStatement);
+			stmt.executeUpdate();
+		}catch(ClassNotFoundException ex) {
+			System.out.println("Error: unable to load driver class.");
+			System.exit(1);
+		} catch (SQLException e1) {
+			e1.printStackTrace();
+		}
+		System.out.println("3");
+	}
+	
+	public ArrayList<String> getAllBlogId(String removeId) {
+		ArrayList<String> blogList = new ArrayList<String>();
+		try {
+			Connect_SQL connect = new Connect_SQL();
+			Connection conn = connect.getConnection();
+			Statement stmt = conn.createStatement();
+			String queryStatement = "SELECT * FROM Blog WHERE UsernameId = " + removeId;
+	        ResultSet rs = stmt.executeQuery(queryStatement);
+	        while(rs.next()){
+	        	blogList.add(rs.getString("BlogID"));
+	        }
+		}catch(ClassNotFoundException ex) {
+			System.out.println("Error: unable to load driver class.");
+			System.exit(1);
+		} catch (SQLException e1) {
+			e1.printStackTrace();
+		}
+		System.out.println("4");
+		return blogList;
+	}
+	
+	public void removeLikeByBlogId(String blogId) {
+		try {
+			Connect_SQL connect = new Connect_SQL();
+			Connection conn = connect.getConnection();
+			PreparedStatement stmt = null;
+			String queryStatement = "DELETE FROM LikeBlog WHERE BlogID = " + blogId;
+			stmt = conn.prepareStatement(queryStatement);
+			stmt.executeUpdate();
+		}catch(ClassNotFoundException ex) {
+			System.out.println("Error: unable to load driver class.");
+			System.exit(1);
+		} catch (SQLException e1) {
+			e1.printStackTrace();
+		}
+		System.out.println("5");
+	}
+	
+	public void removeCommentByBlogId(String blogId) {
+		try {
+			Connect_SQL connect = new Connect_SQL();
+			Connection conn = connect.getConnection();
+			PreparedStatement stmt = null;
+			String queryStatement = "DELETE FROM Comment WHERE BlogID = " + blogId;
+			stmt = conn.prepareStatement(queryStatement);
+			stmt.executeUpdate();
+		}catch(ClassNotFoundException ex) {
+			System.out.println("Error: unable to load driver class.");
+			System.exit(1);
+		} catch (SQLException e1) {
+			e1.printStackTrace();
+		}
+		System.out.println("6");
+	}
+	
+	public void removeBlogByUserId(String removeId) {
+		try {
+			Connect_SQL connect = new Connect_SQL();
+			Connection conn = connect.getConnection();
+			PreparedStatement stmt = null;
+			String queryStatement = "DELETE FROM Blog WHERE UsernameID = " + removeId;
+			stmt = conn.prepareStatement(queryStatement);
+			stmt.executeUpdate();
+		}catch(ClassNotFoundException ex) {
+			System.out.println("Error: unable to load driver class.");
+			System.exit(1);
+		} catch (SQLException e1) {
+			e1.printStackTrace();
+		}
+		System.out.println("7");
+	}
+
 }

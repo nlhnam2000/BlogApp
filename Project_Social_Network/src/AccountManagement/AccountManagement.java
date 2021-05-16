@@ -3,14 +3,19 @@ package AccountManagement;
 import java.awt.BorderLayout;
 import java.awt.EventQueue;
 import java.awt.Font;
+import java.awt.HeadlessException;
 
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
 import javax.swing.table.DefaultTableModel;
+
+import User.Users;
+
 import javax.swing.JTabbedPane;
 import javax.swing.UIManager;
 import java.awt.Color;
@@ -20,11 +25,13 @@ import javax.swing.JPasswordField;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.awt.event.ActionEvent;
 
 public class AccountManagement extends JFrame {
-
+	static Users user; 
+	private String removeId; //this id is used for removing an account
 	private JPanel contentPane;
 	private JTable table;
 //	private JTable table2_user;
@@ -48,6 +55,7 @@ public class AccountManagement extends JFrame {
 	private JButton btnNewButton_5;
 	private JButton btnNewButton_6;
 	private ImageIcon frame_bg = new ImageIcon("src/FrameImages/frame_bg.jpg");
+	private JTextField txtBoxRemove;
 
 	/**
 	 * Launch the application.
@@ -56,7 +64,7 @@ public class AccountManagement extends JFrame {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					AccountManagement frame = new AccountManagement();
+					AccountManagement frame = new AccountManagement(user);
 					frame.setVisible(true);
 					frame.showUser();
 				} catch (Exception e) {
@@ -110,7 +118,8 @@ public class AccountManagement extends JFrame {
 		}
 		model1_admin.setColumnIdentifiers(column_admin);
 	}
-	public AccountManagement() {
+	public AccountManagement(Users u) {
+		user = new Users(u);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 600, 400);
 		contentPane = new JPanel();
@@ -226,7 +235,7 @@ public class AccountManagement extends JFrame {
 		JButton btnNewButton = new JButton("Add");
 		btnNewButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				AddForm addForm = new AddForm();
+				AddForm addForm = new AddForm(u);
 				addForm.setVisible(true);
 				/*
 				String id = textField1_id.getText();
@@ -250,7 +259,7 @@ public class AccountManagement extends JFrame {
 		JButton btnNewButton_1 = new JButton("Update");
 		btnNewButton_1.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				UpdateForm updateForm = new UpdateForm();
+				UpdateForm updateForm = new UpdateForm(u);
 				updateForm.setVisible(true);
 				return;
 			}
@@ -260,6 +269,36 @@ public class AccountManagement extends JFrame {
 		panel1_admin.add(btnNewButton_1);
 		
 		btnNewButton_2 = new JButton("Remove");
+		btnNewButton_2.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				removeId = txtBoxRemove.getText();
+				AccountQuery accQuery = new AccountQuery();
+			
+				accQuery.removeInteractionByUserId(removeId);
+				
+				accQuery.removeLikeByUserId(removeId);
+				accQuery.removeCommentByUserId(removeId);
+				
+				ArrayList<String> list = new ArrayList<String>();
+				list = accQuery.getAllBlogId(removeId);
+				
+				for (String item : list) {
+					accQuery.removeLikeByBlogId(item);
+					accQuery.removeCommentByBlogId(item);
+				}
+				
+				accQuery.removeBlogByUserId(removeId);
+				
+				if (accQuery.removeById(removeId) == 1) {
+					JOptionPane.showMessageDialog(null, "Successfully removed an account from database", "InfoBox: ", JOptionPane.INFORMATION_MESSAGE);
+				}
+				else {
+					JOptionPane.showMessageDialog(null, "Fail to remove an account from database", "InfoBox: ", JOptionPane.INFORMATION_MESSAGE);
+				}
+				
+				showUser();
+			}
+		});
 		btnNewButton_2.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		btnNewButton_2.setBounds(254, 223, 85, 21);
 		panel1_admin.add(btnNewButton_2);
@@ -291,6 +330,11 @@ public class AccountManagement extends JFrame {
 		btnNewButton_2_1.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		btnNewButton_2_1.setBounds(10, 223, 85, 21);
 		panel1_admin.add(btnNewButton_2_1);
+		
+		txtBoxRemove = new JTextField();
+		txtBoxRemove.setBounds(179, 223, 70, 21);
+		panel1_admin.add(txtBoxRemove);
+		txtBoxRemove.setColumns(10);
 		
 		JLabel lblNewLabel = new JLabel("ACCOUNT MANAGEMENT");
 		lblNewLabel.setForeground(new Color(220, 20, 60));
