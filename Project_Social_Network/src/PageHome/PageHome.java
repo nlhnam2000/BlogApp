@@ -16,8 +16,6 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
-import com.mysql.cj.Query;
-
 import User.Users;
 import Blog.Blogs;
 import Blog.postBlogFrame;
@@ -280,26 +278,15 @@ public class PageHome extends JFrame implements ActionListener {
 			int isLiked = blog.isLiked(user.getUsername()); 
 			JButton likeButton = new JButton(); 
 			if (blog.isLiked(user.getUsername()) == 0) {
-//				if (blog.getLikes() > 0) {
-//					likeButton.setText("Like (" + blog.likes + ")");
-//					likeButton.setForeground(Color.black);
-//				}
-//				else if (blog.getLikes() == 0) {
-//					// likeButton.setText("Like");
-//					likeButton.setForeground(Color.black);
-//				}
 				likeButton.setText("Like (" + blog.getLikes() + ")");
 				likeButton.setForeground(Color.black);
 			}
 			else {
-				// likeButton.setText("Like");
-				// likeButton.setBorderPainted(false);
 				likeButton.setText("Like (" + blog.getLikes() + ")");
 				likeButton.setForeground(Color.blue);
 			}
 			
 			JButton commentButton = new JButton("Comment (" + blog.cmt.size() + ")"); 
-			
 			
 			buttonPanel.add(likeButton); 
 			buttonPanel.add(commentButton); 
