@@ -16,6 +16,8 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
+import com.mysql.cj.Query;
+
 import User.Users;
 import Blog.Blogs;
 import Blog.postBlogFrame;
@@ -151,7 +153,6 @@ public class PageHome extends JFrame implements ActionListener {
 			scrollPanel.add(Box.createRigidArea(new Dimension(0,10))); 
 		}
 		
-		
 		container.add(scrollPane, gbc); 
 		
 		sidebarPanel.setLayout(new BoxLayout(sidebarPanel, BoxLayout.PAGE_AXIS));
@@ -159,10 +160,10 @@ public class PageHome extends JFrame implements ActionListener {
 		sidebarPanel.setBorder(BorderFactory.createLineBorder(Color.black));
 		JScrollPane sidebarScroll = new JScrollPane(sidebarPanel); 
 		sidebarScroll.setBorder(null);
-		sidebarScroll.setPreferredSize(new Dimension(200, 700));
+		sidebarScroll.setPreferredSize(new Dimension(300, 700));
 		sidebarScroll.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_NEVER); 
  		
-		sidebarPanel.add(Box.createRigidArea(new Dimension(0, 15))); 
+		sidebarPanel.add(Box.createRigidArea(new Dimension(0, 10))); 
 		JLabel text = new JLabel("MOST RECENT BLOG"); 
 		text.setFont(new Font("Tahoma", Font.BOLD, 15));
 		sidebarPanel.add(text);
@@ -170,7 +171,25 @@ public class PageHome extends JFrame implements ActionListener {
 		
 		ArrayList<JLabel> titleBlog = showBlogTitle(blogList); 
 		for (JLabel title : titleBlog) {
-			sidebarPanel.add(title); 
+			JPanel panel = new JPanel(); 
+			panel.setLayout(new BorderLayout());
+			title.setFont(new Font("Tahoma", Font.BOLD, 12));
+			panel.add(title, BorderLayout.WEST); 
+			JButton viewButton = new JButton("View"); 
+			viewButton.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					// System.out.println(title.getText()); 
+					for (Blogs blog: blogList) {
+						if (title.getText().equals(blog.get_Title())) {
+							BlogFrame blogFrame = new BlogFrame(blog, user); 
+							blogFrame.setVisible(true);
+						}
+ 					}
+				}
+			});
+			panel.add(viewButton, BorderLayout.EAST);
+			
+			sidebarPanel.add(panel); 
 			sidebarPanel.add(Box.createRigidArea(new Dimension(0,10)));
 		}
 		
@@ -292,27 +311,7 @@ public class PageHome extends JFrame implements ActionListener {
 			
 			// add action listener
 			likeButton.addActionListener(new ActionListener() {
-				public void actionPerformed(ActionEvent ae) {
-//					String state = ae.getActionCommand(); 
-//					if (state.contains("Like")) { // liked
-//						// System.out.println("Liked"); 
-//						String date = String.valueOf(LocalDate.now()); 
-//						int userIdBlog = blog.getUserIDWithUsername(blog.get_Username()); 
-//						Interaction notice = new Interaction(userIdBlog, blog.get_Username(), user.getUserID(), user.getUsername(), blog.get_BlogID(), date, "");
-//						user.LikeBlog(blog.get_BlogID(), blog.get_Username(), notice);
-//						likeButton.setText("Unlike"); 
-//						likeButton.setForeground(Color.blue);
-//					}
-//					else {
-//						// System.out.println("Unliked"); 
-//						String date = String.valueOf(LocalDate.now()); 
-//						int userIdBlog = blog.getUserIDWithUsername(blog.get_Username()); 
-//						Interaction notice = new Interaction(userIdBlog, blog.get_Username(), user.getUserID(), user.getUsername(), blog.get_BlogID(), date, "");
-//						user.LikeBlog(blog.get_BlogID(), blog.get_Username(), notice);
-//						likeButton.setText("Like");
-//						likeButton.setForeground(Color.black);
-//					}
-					
+				public void actionPerformed(ActionEvent ae) {					
 					String date = String.valueOf(LocalDate.now()); 
 					int userIdBlog = blog.getUserIDWithUsername(blog.get_Username()); 
 					Interaction notice = new Interaction(userIdBlog, blog.get_Username(), user.getUserID(), user.getUsername(), blog.get_BlogID(), date, "");
@@ -362,12 +361,14 @@ public class PageHome extends JFrame implements ActionListener {
 						public void actionPerformed(ActionEvent e) {
 							System.out.println(commentText.getText());
 							user.Comment(blog, commentText.getText(), LocalDate.now());
+							dialog.setVisible(false);
 						}
 					});
 					buttonPanel.add(addCommentButton); 
 					
 					dialog.add(panel); 
 					dialog.add(buttonPanel); 
+					dialog.pack();
 					dialog.setVisible(true);
 				}
 			});

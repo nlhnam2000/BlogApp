@@ -49,9 +49,10 @@ public class BlogFrame extends JFrame {
 		user = u; 
 		// setSize(600, 120); 
 		// setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setTitle("Blog of " + user.getUsername()); 
 		setBounds(500, 300, 600, 400);
 		contentPane.setLayout(new BoxLayout(contentPane, BoxLayout.PAGE_AXIS));
-		contentPane.setBackground(Color.white);
+		contentPane.setBackground(new PageHome(user).getBackground());
 		contentPane.setBorder(BorderFactory.createLineBorder(Color.black));
 		
 		titleBlog = new JLabel(blog.get_Title()); 
@@ -177,6 +178,7 @@ public class BlogFrame extends JFrame {
 		
 		// show comment here
 		blog.getComments();
+		contentPane.add(Box.createRigidArea(new Dimension(0,10))); 
 		ArrayList<JPanel> cmtPanel = showComment(blog.cmt); 
 		for (JPanel panel : cmtPanel) {
 			contentPane.add(panel); 
@@ -188,6 +190,7 @@ public class BlogFrame extends JFrame {
 		
 		
 		add(scrollPane);
+		pack();
 		
 		//setUndecorated(true);
 	}

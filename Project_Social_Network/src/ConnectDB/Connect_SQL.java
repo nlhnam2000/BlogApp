@@ -8,8 +8,8 @@ import java.sql.SQLException;
 public class Connect_SQL{
 	
 	static Connection conn = null; 
-//	static String dbURL = "jdbc:sqlserver://localhost:1433;DatabaseName=Social_Network";
-	static String dbURL = "jdbc:sqlserver://localhost:62673;databaseName=Social_Network;integratedSecurity=true;";
+	static String dbURL = "jdbc:sqlserver://localhost:1433;DatabaseName=Social_Network";
+	// static String dbURL = "jdbc:sqlserver://localhost:62673;databaseName=Social_Network;integratedSecurity=true;";
     static String user = "sa";
     static String pass = "Password123@jkl#";
     
@@ -17,7 +17,7 @@ public class Connect_SQL{
     	try {
     		
     		Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver"); 
-            conn = DriverManager.getConnection(dbURL);
+            conn = DriverManager.getConnection(dbURL, user, pass);
     		
     	} catch(ClassNotFoundException ex) {
 			System.out.println("Error: unable to load driver class.");
